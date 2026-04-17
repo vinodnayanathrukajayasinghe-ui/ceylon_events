@@ -1,26 +1,24 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
-
+import { Outlet, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
+import { LoadingScreen } from "@/components/LoadingScreen";
+import { SiteLayout } from "@/components/SiteLayout";
+import { AuthProvider } from "@/lib/auth";
+import { SITE } from "@/lib/site";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+    <SiteLayout>
+      <div className="container-luxe py-32 text-center">
+        <p className="text-xs tracking-[0.4em] text-gold uppercase">Error 404</p>
+        <h1 className="mt-4 font-display text-7xl text-gradient-gold">Lost in the Lights</h1>
+        <p className="mt-6 text-muted-foreground max-w-md mx-auto">
+          The page you're looking for has moved or no longer exists.
         </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
-        </div>
+        <a href="/" className="mt-10 inline-block px-8 py-3 bg-gradient-gold text-primary-foreground uppercase tracking-[0.2em] text-xs rounded-sm">
+          Return Home
+        </a>
       </div>
-    </div>
+    </SiteLayout>
   );
 }
 
@@ -29,20 +27,24 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: `${SITE.name} — ${SITE.tagline}` },
+      { name: "description", content: SITE.description },
+      { name: "theme-color", content: "#0a0908" },
+      { property: "og:title", content: `${SITE.name} — ${SITE.tagline}` },
+      { property: "og:description", content: SITE.description },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { property: "og:site_name", content: SITE.name },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: appCss,
+        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap",
       },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
     ],
   }),
   shellComponent: RootShell,
@@ -65,5 +67,10 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  return <Outlet />;
+  return (
+    <AuthProvider>
+      <LoadingScreen />
+      <Outlet />
+    </AuthProvider>
+  );
 }
