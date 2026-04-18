@@ -20,12 +20,6 @@ function AdminLayout() {
   const { user, isAdmin, loading, signOut } = useAuth();
   const { location } = useRouterState();
 
-  useEffect(() => {
-    if (!loading && !user) {
-      throw redirect({ to: "/login" });
-    }
-  }, [loading, user]);
-
   if (loading) {
     return <div className="min-h-screen grid place-items-center bg-onyx text-gold">Loading…</div>;
   }
