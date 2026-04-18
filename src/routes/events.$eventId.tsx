@@ -1,7 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Calendar, MapPin, Clock, ArrowLeft, Ticket } from "lucide-react";
+import { Calendar, MapPin, Clock, ArrowLeft } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
+import { TicketCheckout } from "@/components/TicketCheckout";
 import { supabase } from "@/integrations/supabase/client";
 import { whatsappLink } from "@/lib/site";
 import g1 from "@/assets/gallery-1.jpg";
@@ -87,23 +88,23 @@ function EventDetailPage() {
             </div>
           </div>
 
-          <aside className="lg:sticky lg:top-28 self-start">
-            <div className="border border-gold p-8 bg-gradient-to-b from-charcoal to-onyx">
-              <p className="text-[10px] tracking-[0.4em] text-gold uppercase mb-3">Starting From</p>
-              <p className="font-display text-5xl text-gradient-gold mb-6">
-                {event.base_price && event.base_price > 0 ? `${event.currency} ${event.base_price}` : "Invitation Only"}
-              </p>
-              {event.status === "sold_out" ? (
-                <button disabled className="w-full py-4 border border-gold text-gold uppercase tracking-[0.2em] text-xs cursor-not-allowed opacity-60">Sold Out</button>
-              ) : (
-                <Link to="/tickets" search={{ event: eventId } as never} className="w-full inline-flex items-center justify-center gap-2 py-4 bg-gradient-gold text-primary-foreground uppercase tracking-[0.2em] text-xs font-medium rounded-sm hover:shadow-gold-lg transition-all">
-                  <Ticket size={14} /> Buy Tickets
+          <aside className="lg:sticky lg:top-28 self-start space-y-4">
+            {event.id ? (
+              <TicketCheckout eventId={event.id} eventTitle={event.title} currency={event.currency || "AED"} />
+            ) : (
+              <div className="border border-gold p-8 bg-gradient-to-b from-charcoal to-onyx">
+                <p className="text-[10px] tracking-[0.4em] text-gold uppercase mb-3">Starting From</p>
+                <p className="font-display text-5xl text-gradient-gold mb-6">
+                  {event.base_price && event.base_price > 0 ? `${event.currency} ${event.base_price}` : "Invitation Only"}
+                </p>
+                <Link to="/contact" className="w-full inline-flex items-center justify-center py-4 bg-gradient-gold text-primary-foreground uppercase tracking-[0.2em] text-xs rounded-sm">
+                  Enquire Now
                 </Link>
-              )}
-              <a href={whatsappLink(`Hi, I'd like more info on ${event.title}`)} target="_blank" rel="noreferrer" className="mt-3 w-full inline-flex items-center justify-center py-4 border border-gold-soft text-ivory uppercase tracking-[0.2em] text-xs hover:border-gold hover:text-gold transition-all">
-                Inquire on WhatsApp
-              </a>
-            </div>
+              </div>
+            )}
+            <a href={whatsappLink(`Hi, I'd like more info on ${event.title}`)} target="_blank" rel="noreferrer" className="w-full inline-flex items-center justify-center py-4 border border-gold-soft text-ivory uppercase tracking-[0.2em] text-xs hover:border-gold hover:text-gold transition-all">
+              Chat on WhatsApp
+            </a>
           </aside>
         </div>
       </section>
