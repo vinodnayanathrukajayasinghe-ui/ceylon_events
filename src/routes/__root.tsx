@@ -4,6 +4,7 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 import { SiteLayout } from "@/components/SiteLayout";
 import { AuthProvider } from "@/lib/auth";
 import { SITE } from "@/lib/site";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -71,6 +72,7 @@ function RootComponent() {
     <AuthProvider>
       <LoadingScreen />
       <Outlet />
+      <Toaster theme="dark" position="top-center" />
     </AuthProvider>
   );
 }
