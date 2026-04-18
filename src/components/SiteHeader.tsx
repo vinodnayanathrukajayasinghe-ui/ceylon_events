@@ -38,12 +38,8 @@ export function SiteHeader() {
       }`}
     >
       <div className="container-luxe flex items-center justify-between h-20">
-        <Link to="/" className="flex items-center gap-3 group" aria-label={SITE.name}>
-          <img src={logo} alt={SITE.name} className="h-12 w-auto transition-transform group-hover:scale-105" />
-          <span className="hidden sm:flex flex-col leading-tight">
-            <span className="font-display text-base text-ivory tracking-wide">Ceylon Kandy</span>
-            <span className="text-[10px] tracking-[0.35em] text-gold uppercase">Events · Dubai</span>
-          </span>
+        <Link to="/" className="flex items-center gap-3 group shrink-0" aria-label={SITE.name}>
+          <img src={logo} alt={SITE.name} className="h-11 md:h-12 w-auto transition-transform group-hover:scale-105" />
         </Link>
 
         {/* Desktop nav */}
