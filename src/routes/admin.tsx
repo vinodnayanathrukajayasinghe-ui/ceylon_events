@@ -1,5 +1,4 @@
-import { createFileRoute, Link, Outlet, useRouterState, redirect } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { LayoutDashboard, CalendarDays, Ticket, Inbox, Mail, LogOut, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 
@@ -8,13 +7,14 @@ export const Route = createFileRoute("/admin")({
   component: AdminLayout,
 });
 
-const ADMIN_NAV = [
+type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean };
+const ADMIN_NAV: NavItem[] = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/events", label: "Events", icon: CalendarDays },
   { to: "/admin/orders", label: "Ticket Orders", icon: Ticket },
   { to: "/admin/bookings", label: "Bookings", icon: Inbox },
   { to: "/admin/inquiries", label: "Inquiries", icon: Mail },
-] as const;
+];
 
 function AdminLayout() {
   const { user, isAdmin, loading, signOut } = useAuth();
