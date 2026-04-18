@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Quote } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { SectionHeading } from "@/components/SectionHeading";
-import logo from "@/assets/logo-ceylon-kandy.png";
+import portrait from "@/assets/sameera-portrait.png";
 
 export const Route = createFileRoute("/founder")({
   head: () => ({
@@ -31,12 +31,10 @@ function FounderPage() {
         <div className="container-luxe grid lg:grid-cols-5 gap-12 items-center">
           <div className="lg:col-span-2 relative aspect-[4/5] max-w-md mx-auto w-full">
             <div className="absolute inset-0 -m-3 border border-gold opacity-50" />
-            <div className="relative size-full bg-charcoal grid place-items-center overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-gold-soft" />
-              <img src={logo} alt="Sameera Sinhapali" className="relative w-2/3 opacity-30" />
-              <div className="absolute bottom-6 left-6 right-6 text-center">
-                <p className="text-[10px] tracking-[0.4em] text-gold uppercase">Portrait Coming Soon</p>
-              </div>
+            <div className="relative size-full bg-gradient-to-b from-charcoal via-onyx to-black overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-gold-soft opacity-40" />
+              <img src={portrait} alt="Sameera Sinhapali — Founder, Ceylon Kandy Events" className="relative size-full object-cover object-top" />
+              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-onyx to-transparent" />
             </div>
           </div>
 

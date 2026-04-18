@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Shield } from "lucide-react";
 import logo from "@/assets/logo-ceylon-kandy.png";
 import { SITE } from "@/lib/site";
+import { useAuth } from "@/lib/auth";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -19,6 +20,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { location } = useRouterState();
+  const { isAdmin } = useAuth();
 
   useEffect(() => setOpen(false), [location.pathname]);
 
@@ -58,6 +60,15 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden lg:flex items-center gap-3">
+          {isAdmin && (
+            <Link
+              to="/admin"
+              className="px-3 py-2.5 text-xs uppercase tracking-[0.2em] text-gold/80 hover:text-gold inline-flex items-center gap-1.5"
+              title="Admin"
+            >
+              <Shield size={14} /> Admin
+            </Link>
+          )}
           <Link
             to="/book"
             className="px-5 py-2.5 text-xs uppercase tracking-[0.2em] border border-gold text-gold hover:bg-gold hover:text-primary-foreground transition-all duration-300 rounded-sm"
