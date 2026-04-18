@@ -20,6 +20,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { location } = useRouterState();
+  const { isAdmin } = useAuth();
 
   useEffect(() => setOpen(false), [location.pathname]);
 
