@@ -19,6 +19,7 @@ interface Props {
   eventId: string;
   eventTitle: string;
   currency: string;
+  fallbackCategories?: Category[];
 }
 
 function createOrderReference() {
@@ -37,12 +38,12 @@ const schema = z.object({
   quantity: z.number().int().min(1).max(20),
 });
 
-export function TicketCheckout({ eventId, eventTitle, currency }: Props) {
+export function TicketCheckout({ eventId, eventTitle, currency, fallbackCategories = [] }: Props) {
   const { user } = useAuth();
-  const [cats, setCats] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [cats, setCats] = useState<Category[]>(fallbackCategories);
+  const [loading, setLoading] = useState(fallbackCategories.length === 0);
   const [loadError, setLoadError] = useState("");
-  const [selectedId, setSelectedId] = useState("");
+  const [selectedId, setSelectedId] = useState(fallbackCategories[0]?.id || "");
   const [qty, setQty] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState<{ ref: string } | null>(null);
@@ -52,7 +53,9 @@ export function TicketCheckout({ eventId, eventTitle, currency }: Props) {
     let mounted = true;
 
     const loadCategories = async () => {
-      setLoading(true);
+      if (!fallbackCategories.length) {
+        setLoading(true);
+      }
       setLoadError("");
 
       const { data, error } = await supabase
@@ -65,16 +68,18 @@ export function TicketCheckout({ eventId, eventTitle, currency }: Props) {
 
       if (error) {
         console.error("Failed to load ticket categories", error);
-        setCats([]);
-        setSelectedId("");
-        setLoadError("Ticket options are taking longer than expected. Please retry in a moment.");
+        if (!fallbackCategories.length) {
+          setCats([]);
+          setSelectedId("");
+          setLoadError("Ticket options are taking longer than expected. Please retry in a moment.");
+        }
         setLoading(false);
         return;
       }
 
       const list = (data || []) as Category[];
-      setCats(list);
-      setSelectedId(list[0]?.id || "");
+      setCats(list.length ? list : fallbackCategories);
+      setSelectedId(list[0]?.id || fallbackCategories[0]?.id || "");
       setQty(1);
       setLoading(false);
     };
@@ -84,7 +89,7 @@ export function TicketCheckout({ eventId, eventTitle, currency }: Props) {
     return () => {
       mounted = false;
     };
-  }, [eventId]);
+  }, [eventId, fallbackCategories]);
 
   const selected = cats.find((category) => category.id === selectedId);
   const remaining = selected ? selected.quantity_total - selected.quantity_sold : 0;

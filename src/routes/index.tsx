@@ -32,18 +32,18 @@ export const Route = createFileRoute("/")({
 });
 
 const SERVICES = [
-  { title: "Corporate Events", desc: "Boardroom-ready galas and summits." },
-  { title: "Private Parties", desc: "Bespoke celebrations, perfectly hosted." },
-  { title: "Weddings", desc: "Cinematic weddings beyond imagination." },
-  { title: "Live Entertainment", desc: "Curated artists, world-class production." },
-  { title: "Stage Shows", desc: "Theatrical scale, premium delivery." },
-  { title: "Ticketed Events", desc: "End-to-end concert & festival production." },
-  { title: "Brand Launches", desc: "Unveilings that command headlines." },
-  { title: "VIP Management", desc: "White-glove service for discerning guests." },
-  { title: "Venue Coordination", desc: "Dubai's finest venues, perfectly secured." },
-  { title: "Event Production", desc: "Light, sound, AV - flawlessly orchestrated." },
-  { title: "Decor & Styling", desc: "Atmospheres that take your breath away." },
-  { title: "Talent Coordination", desc: "Top artists, models, and hosts." },
+  { title: "Modeling Events", desc: "Runway moments, cast direction, and fashion-forward staging." },
+  { title: "Private Parties", desc: "Bold nightlife energy curated for premium guest lists." },
+  { title: "Live Shows", desc: "Sensational performers, band setups, and concert-style execution." },
+  { title: "High-Voltage Entertainment", desc: "Lighting, sound, and crowd energy that fills the room." },
+  { title: "Stage Shows", desc: "Immersive production for headline-worthy live experiences." },
+  { title: "Ticketed Nights", desc: "Sell-out concepts built for buzz, bookings, and repeat crowds." },
+  { title: "Brand Launches", desc: "Loud first impressions that people talk about after midnight." },
+  { title: "VIP Hosting", desc: "Fast, polished guest management for high-profile arrivals." },
+  { title: "Venue Coordination", desc: "Dubai venues transformed into statement-making party spaces." },
+  { title: "Event Production", desc: "Audio, staging, truss, and show flow handled end-to-end." },
+  { title: "Decor & Styling", desc: "Club-lit atmospheres with a premium visual signature." },
+  { title: "Talent Coordination", desc: "Bands, DJs, dancers, hosts, and special act programming." },
 ];
 
 const FEATURED = [
@@ -149,14 +149,14 @@ function HomePage() {
               Dubai - United Arab Emirates
             </p>
             <h1 className="font-display text-5xl md:text-7xl lg:text-8xl leading-[0.95] text-ivory">
-              Where <span className="text-gradient-gold italic">Moments</span>
+              Bringing The <span className="text-gradient-gold italic">Energy</span>
               <br />
-              Become <span className="text-gradient-gold italic">Legacy</span>
+              People Keep <span className="text-gradient-gold italic">Talking About</span>
             </h1>
             <p className="mt-8 max-w-xl text-lg text-ivory/75 leading-relaxed">
-              Ceylon Kandy Events stages high-end live experiences, private showcases, band
-              productions, and exclusive nights shaped with precision lighting, premium sound, and
-              unmistakable atmosphere.
+              Bringing the energy and excitement that keeps people talking. Stunning modeling
+              events, sensational live shows, and high-voltage entertainment designed for premium
+              crowds and unforgettable nights.
             </p>
             <div className="mt-8 inline-flex flex-wrap items-center gap-3 rounded-full border border-gold/25 bg-onyx/45 px-5 py-2.5 backdrop-blur-md">
               <span className="h-2.5 w-2.5 rounded-full bg-gold shadow-[0_0_14px_rgba(212,175,55,0.8)] animate-pulse-gold" />
@@ -231,7 +231,7 @@ function HomePage() {
           <SectionHeading
             eyebrow="Upcoming"
             title="Featured Events"
-            subtitle="Hand-curated experiences reserved for those who appreciate the extraordinary."
+            subtitle="High-energy nights, fashion-forward moments, and premium experiences built to keep people talking."
           />
           <div className="mt-16 grid md:grid-cols-3 gap-8">
             {FEATURED.map((e) => (

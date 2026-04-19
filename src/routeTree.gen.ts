@@ -24,6 +24,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as TicketsEventIdRouteImport } from './routes/tickets.$eventId'
 import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminInquiriesRouteImport } from './routes/admin.inquiries'
@@ -105,6 +106,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const TicketsEventIdRoute = TicketsEventIdRouteImport.update({
+  id: '/$eventId',
+  path: '/$eventId',
+  getParentRoute: () => TicketsRoute,
+} as any)
 const EventsEventIdRoute = EventsEventIdRouteImport.update({
   id: '/$eventId',
   path: '/$eventId',
@@ -145,12 +151,13 @@ export interface FileRoutesByFullPath {
   '/partners': typeof PartnersRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
-  '/tickets': typeof TicketsRoute
+  '/tickets': typeof TicketsRouteWithChildren
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/events/$eventId': typeof EventsEventIdRoute
+  '/tickets/$eventId': typeof TicketsEventIdRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -166,12 +173,13 @@ export interface FileRoutesByTo {
   '/partners': typeof PartnersRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
-  '/tickets': typeof TicketsRoute
+  '/tickets': typeof TicketsRouteWithChildren
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/events/$eventId': typeof EventsEventIdRoute
+  '/tickets/$eventId': typeof TicketsEventIdRoute
   '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
@@ -189,12 +197,13 @@ export interface FileRoutesById {
   '/partners': typeof PartnersRoute
   '/services': typeof ServicesRoute
   '/signup': typeof SignupRoute
-  '/tickets': typeof TicketsRoute
+  '/tickets': typeof TicketsRouteWithChildren
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/events/$eventId': typeof EventsEventIdRoute
+  '/tickets/$eventId': typeof TicketsEventIdRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -219,6 +228,7 @@ export interface FileRouteTypes {
     | '/admin/inquiries'
     | '/admin/orders'
     | '/events/$eventId'
+    | '/tickets/$eventId'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -240,6 +250,7 @@ export interface FileRouteTypes {
     | '/admin/inquiries'
     | '/admin/orders'
     | '/events/$eventId'
+    | '/tickets/$eventId'
     | '/admin'
   id:
     | '__root__'
@@ -262,6 +273,7 @@ export interface FileRouteTypes {
     | '/admin/inquiries'
     | '/admin/orders'
     | '/events/$eventId'
+    | '/tickets/$eventId'
     | '/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -279,7 +291,7 @@ export interface RootRouteChildren {
   PartnersRoute: typeof PartnersRoute
   ServicesRoute: typeof ServicesRoute
   SignupRoute: typeof SignupRoute
-  TicketsRoute: typeof TicketsRoute
+  TicketsRoute: typeof TicketsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -389,6 +401,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/tickets/$eventId': {
+      id: '/tickets/$eventId'
+      path: '/$eventId'
+      fullPath: '/tickets/$eventId'
+      preLoaderRoute: typeof TicketsEventIdRouteImport
+      parentRoute: typeof TicketsRoute
+    }
     '/events/$eventId': {
       id: '/events/$eventId'
       path: '/$eventId'
@@ -456,6 +475,17 @@ const EventsRouteChildren: EventsRouteChildren = {
 const EventsRouteWithChildren =
   EventsRoute._addFileChildren(EventsRouteChildren)
 
+interface TicketsRouteChildren {
+  TicketsEventIdRoute: typeof TicketsEventIdRoute
+}
+
+const TicketsRouteChildren: TicketsRouteChildren = {
+  TicketsEventIdRoute: TicketsEventIdRoute,
+}
+
+const TicketsRouteWithChildren =
+  TicketsRoute._addFileChildren(TicketsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
@@ -470,7 +500,7 @@ const rootRouteChildren: RootRouteChildren = {
   PartnersRoute: PartnersRoute,
   ServicesRoute: ServicesRoute,
   SignupRoute: SignupRoute,
-  TicketsRoute: TicketsRoute,
+  TicketsRoute: TicketsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

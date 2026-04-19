@@ -1,10 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Calendar, Clock, MapPin } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, MapPin, Ticket as TicketIcon } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
-import { TicketCheckout } from "@/components/TicketCheckout";
 import { supabase } from "@/integrations/supabase/client";
-import { getFallbackEventImage, normalizeEvent } from "@/lib/event-content";
+import { getFallbackEventBySlug, getFallbackEventImage, normalizeEvent } from "@/lib/event-content";
 import { whatsappLink } from "@/lib/site";
 
 interface EventDetail {
@@ -49,11 +48,12 @@ export const Route = createFileRoute("/events/$eventId")({
 
 function EventDetailPage() {
   const { eventId } = Route.useParams();
-  const [event, setEvent] = useState<EventDetail | null>(null);
-  const [loading, setLoading] = useState(true);
+  const fallbackEvent = getFallbackEventBySlug(eventId) as EventDetail | null;
+  const [event, setEvent] = useState<EventDetail | null>(fallbackEvent);
+  const [loading, setLoading] = useState(!fallbackEvent);
 
   useEffect(() => {
-    setLoading(true);
+    if (!fallbackEvent) setLoading(true);
     supabase
       .from("events")
       .select("*")
@@ -64,10 +64,10 @@ function EventDetailPage() {
           console.error("Failed to load event details", error);
         }
 
-        setEvent(data ? normalizeEvent(data as EventDetail) : null);
+        setEvent(data ? normalizeEvent(data as EventDetail) : fallbackEvent);
         setLoading(false);
       });
-  }, [eventId]);
+  }, [eventId, fallbackEvent]);
 
   if (loading) {
     return (
@@ -144,24 +144,29 @@ function EventDetailPage() {
           </div>
 
           <aside className="space-y-4 self-start lg:sticky lg:top-28">
-            {event.status !== "sold_out" ? (
-              <TicketCheckout eventId={event.id} eventTitle={event.title} currency={event.currency} />
-            ) : (
-              <div className="border border-gold bg-gradient-to-b from-charcoal to-onyx p-8">
-                <p className="mb-3 text-[10px] uppercase tracking-[0.4em] text-gold">Starting From</p>
-                <p className="mb-6 font-display text-5xl text-gradient-gold">
-                  {event.base_price && event.base_price > 0
-                    ? `${event.currency} ${event.base_price}`
-                    : "Invitation Only"}
-                </p>
+            <div className="border border-gold bg-gradient-to-b from-charcoal to-onyx p-8">
+              <p className="mb-3 text-[10px] uppercase tracking-[0.4em] text-gold">Event Access</p>
+              <p className="mb-6 font-display text-5xl text-gradient-gold">
+                {event.base_price && event.base_price > 0
+                  ? `${event.currency} ${event.base_price}`
+                  : "Invitation Only"}
+              </p>
+              {event.status === "sold_out" ? (
                 <Link
                   to="/contact"
                   className="inline-flex w-full items-center justify-center rounded-sm bg-gradient-gold py-4 text-xs uppercase tracking-[0.2em] text-primary-foreground"
                 >
-                  Enquire Now
+                  Join Waiting List
                 </Link>
-              </div>
-            )}
+              ) : (
+                <a
+                  href={`/tickets/${event.slug}`}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-sm bg-gradient-gold py-4 text-xs uppercase tracking-[0.2em] text-primary-foreground"
+                >
+                  <TicketIcon size={14} /> Buy Tickets
+                </a>
+              )}
+            </div>
             <a
               href={whatsappLink(`Hi, I'd like more info on ${event.title}`)}
               target="_blank"

@@ -4,7 +4,12 @@ import { ArrowLeft, Calendar, MapPin, Ticket as TicketIcon } from "lucide-react"
 import { SiteLayout } from "@/components/SiteLayout";
 import { TicketCheckout } from "@/components/TicketCheckout";
 import { supabase } from "@/integrations/supabase/client";
-import { getFallbackEventImage, normalizeEvent } from "@/lib/event-content";
+import {
+  getFallbackEventBySlug,
+  getFallbackEventImage,
+  getFallbackTicketCategoriesBySlug,
+  normalizeEvent,
+} from "@/lib/event-content";
 
 interface TicketEventDetail {
   id: string;
@@ -35,11 +40,12 @@ export const Route = createFileRoute("/tickets/$eventId")({
 
 function TicketEventPage() {
   const { eventId } = Route.useParams();
-  const [event, setEvent] = useState<TicketEventDetail | null>(null);
-  const [loading, setLoading] = useState(true);
+  const fallbackEvent = getFallbackEventBySlug(eventId) as TicketEventDetail | null;
+  const [event, setEvent] = useState<TicketEventDetail | null>(fallbackEvent);
+  const [loading, setLoading] = useState(!fallbackEvent);
 
   useEffect(() => {
-    setLoading(true);
+    if (!fallbackEvent) setLoading(true);
     supabase
       .from("events")
       .select("*")
@@ -50,10 +56,10 @@ function TicketEventPage() {
           console.error("Failed to load ticket event", error);
         }
 
-        setEvent(data ? normalizeEvent(data as TicketEventDetail) : null);
+        setEvent(data ? normalizeEvent(data as TicketEventDetail) : fallbackEvent);
         setLoading(false);
       });
-  }, [eventId]);
+  }, [eventId, fallbackEvent]);
 
   if (loading) {
     return (
@@ -153,7 +159,12 @@ function TicketEventPage() {
                   </Link>
                 </div>
               ) : (
-                <TicketCheckout eventId={event.id} eventTitle={event.title} currency={event.currency} />
+                <TicketCheckout
+                  eventId={event.id}
+                  eventTitle={event.title}
+                  currency={event.currency}
+                  fallbackCategories={getFallbackTicketCategoriesBySlug(event.slug)}
+                />
               )}
             </div>
           </div>
