@@ -2,18 +2,18 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ArrowRight } from "lucide-react";
-import iconCorporate from "@/assets/services/corporate-galas.png";
-import iconWeddings from "@/assets/services/luxury-weddings.png";
-import iconPrivate from "@/assets/services/private-celebrations.png";
-import iconConcerts from "@/assets/services/concerts-festivals.png";
-import iconBrand from "@/assets/services/brand-launches.png";
-import iconLive from "@/assets/services/live-entertainment.png";
-import iconVenue from "@/assets/services/venue-coordination.png";
-import iconProduction from "@/assets/services/event-production.png";
-import iconDecor from "@/assets/services/decor-styling.png";
-import iconVip from "@/assets/services/vip-management.png";
-import iconContent from "@/assets/services/content-coverage.png";
-import iconConcierge from "@/assets/services/concierge-hospitality.png";
+import iconCorporate from "@/assets/services/corporate-galas.jpg";
+import iconWeddings from "@/assets/services/luxury-weddings.jpg";
+import iconPrivate from "@/assets/services/private-celebrations.jpg";
+import iconConcerts from "@/assets/services/concerts-festivals.jpg";
+import iconBrand from "@/assets/services/brand-launches.jpg";
+import iconLive from "@/assets/services/live-entertainment.jpg";
+import iconVenue from "@/assets/services/venue-coordination.jpg";
+import iconProduction from "@/assets/services/event-production.jpg";
+import iconDecor from "@/assets/services/decor-styling.jpg";
+import iconVip from "@/assets/services/vip-management.jpg";
+import iconContent from "@/assets/services/content-coverage.jpg";
+import iconConcierge from "@/assets/services/concierge-hospitality.jpg";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
@@ -28,18 +28,18 @@ export const Route = createFileRoute("/services")({
 });
 
 const SERVICES = [
-  { icon: iconCorporate, title: "Corporate Galas", desc: "Boardroom-grade galas, summits, awards nights and executive retreats produced with white-glove discretion." },
-  { icon: iconWeddings, title: "Luxury Weddings", desc: "Cinematic weddings — palace, beach, desert or yacht. Curated end-to-end from styling to honeymoon coordination." },
-  { icon: iconPrivate, title: "Private Celebrations", desc: "Birthdays, anniversaries, family gatherings — bespoke celebrations hosted with absolute confidentiality." },
-  { icon: iconConcerts, title: "Concerts & Festivals", desc: "Full festival production — staging, sound, lighting, ticketing, artist liaison and security." },
-  { icon: iconBrand, title: "Brand Launches", desc: "Product reveals and brand activations engineered for press, social and word-of-mouth resonance." },
-  { icon: iconLive, title: "Live Entertainment", desc: "Curated international DJs, vocalists, dancers, and performance artists across genres." },
-  { icon: iconVenue, title: "Venue Coordination", desc: "Privileged access to Dubai's most coveted venues — Atlantis, Burj Al Arab, Address Sky View, SLS, and beyond." },
-  { icon: iconProduction, title: "Event Production", desc: "AV, lighting, staging, scenography and rigging — engineered to broadcast and cinema standards." },
-  { icon: iconDecor, title: "Decor & Styling", desc: "Floral, tablescape, lounge and atmospheric design that transforms any venue into a private world." },
-  { icon: iconVip, title: "VIP Management", desc: "Hospitality concierge for royal, celebrity and executive guests — arrivals, suites, security, and itineraries." },
-  { icon: iconContent, title: "Content & Coverage", desc: "Cinematic videography, editorial photography and live social coverage during your event." },
-  { icon: iconConcierge, title: "Concierge & Hospitality", desc: "After-event journeys — yachts, dining, retreats and bespoke gifting curated to each guest." },
+  { img: iconCorporate, title: "Corporate Galas", desc: "Boardroom-grade galas, summits, awards nights and executive retreats produced with white-glove discretion." },
+  { img: iconWeddings, title: "Luxury Weddings", desc: "Cinematic weddings — palace, beach, desert or yacht. Curated end-to-end from styling to honeymoon coordination." },
+  { img: iconPrivate, title: "Private Celebrations", desc: "Birthdays, anniversaries, family gatherings — bespoke celebrations hosted with absolute confidentiality." },
+  { img: iconConcerts, title: "Concerts & Festivals", desc: "Full festival production — staging, sound, lighting, ticketing, artist liaison and security." },
+  { img: iconBrand, title: "Brand Launches", desc: "Product reveals and brand activations engineered for press, social and word-of-mouth resonance." },
+  { img: iconLive, title: "Live Entertainment", desc: "Curated international DJs, vocalists, dancers, and performance artists across genres." },
+  { img: iconVenue, title: "Venue Coordination", desc: "Privileged access to Dubai's most coveted venues — Atlantis, Burj Al Arab, Address Sky View, SLS, and beyond." },
+  { img: iconProduction, title: "Event Production", desc: "AV, lighting, staging, scenography and rigging — engineered to broadcast and cinema standards." },
+  { img: iconDecor, title: "Decor & Styling", desc: "Floral, tablescape, lounge and atmospheric design that transforms any venue into a private world." },
+  { img: iconVip, title: "VIP Management", desc: "Hospitality concierge for royal, celebrity and executive guests — arrivals, suites, security, and itineraries." },
+  { img: iconContent, title: "Content & Coverage", desc: "Cinematic videography, editorial photography and live social coverage during your event." },
+  { img: iconConcierge, title: "Concierge & Hospitality", desc: "After-event journeys — yachts, dining, retreats and bespoke gifting curated to each guest." },
 ];
 
 function ServicesPage() {
@@ -60,15 +60,25 @@ function ServicesPage() {
 
       <section className="py-24">
         <div className="container-luxe">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-gold-soft/40 border border-gold-soft">
-            {SERVICES.map(({ icon, title, desc }) => (
-              <div key={title} className="bg-onyx p-10 hover:bg-charcoal transition-all duration-500 group cursor-pointer">
-                <div className="mb-6 size-16 grid place-items-center">
-                  <img src={icon} alt={title} loading="lazy" width={64} height={64} className="size-16 object-contain group-hover:scale-110 transition-transform duration-500" />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {SERVICES.map(({ img, title, desc }) => (
+              <article key={title} className="group relative overflow-hidden border border-gold-soft bg-onyx hover:border-gold transition-all duration-500">
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <img
+                    src={img}
+                    alt={title}
+                    loading="lazy"
+                    width={800}
+                    height={600}
+                    className="size-full object-cover group-hover:scale-110 transition-transform duration-[1200ms]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-onyx via-onyx/40 to-transparent" />
                 </div>
-                <h3 className="font-display text-2xl text-ivory mb-3 group-hover:text-gold transition-colors">{title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{desc}</p>
-              </div>
+                <div className="p-7 -mt-16 relative">
+                  <h3 className="font-display text-2xl text-ivory mb-3 group-hover:text-gold transition-colors">{title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{desc}</p>
+                </div>
+              </article>
             ))}
           </div>
         </div>
