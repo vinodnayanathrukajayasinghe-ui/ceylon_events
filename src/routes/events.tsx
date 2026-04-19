@@ -50,12 +50,14 @@ interface EventRow {
 }
 
 function EventsPage() {
-  const [events, setEvents] = useState<EventRow[]>(FALLBACK);
+  const [events, setEvents] = useState<EventRow[]>([]);
+  const [loaded, setLoaded] = useState(false);
   const [filter, setFilter] = useState<typeof FILTERS[number]>("All");
 
   useEffect(() => {
     supabase.from("events").select("*").eq("is_published", true).order("event_date").then(({ data }) => {
-      if (data && data.length > 0) setEvents(data as EventRow[]);
+      setEvents((data && data.length > 0) ? (data as EventRow[]) : FALLBACK);
+      setLoaded(true);
     });
   }, []);
 
@@ -120,7 +122,7 @@ function EventsPage() {
             </Link>
           ))}
         </div>
-        {filtered.length === 0 && (
+        {loaded && filtered.length === 0 && (
           <p className="text-center mt-20 text-muted-foreground">No events match this filter.</p>
         )}
       </section>
