@@ -54,7 +54,7 @@ export function SiteHeader() {
           <img
             src={logo}
             alt={SITE.name}
-            className="relative h-[3.15rem] md:h-[3.8rem] lg:h-[4.35rem] w-auto max-w-[9.2rem] md:max-w-[11.8rem] lg:max-w-[13.8rem] drop-shadow-[0_0_18px_rgba(212,175,55,0.28)] transition-transform duration-500 group-hover:scale-[1.04]"
+            className="logo-premium-gold relative h-[3.15rem] md:h-[3.8rem] lg:h-[4.35rem] w-auto max-w-[9.2rem] md:max-w-[11.8rem] lg:max-w-[13.8rem] drop-shadow-[0_0_18px_rgba(212,175,55,0.28)] transition-transform duration-500 group-hover:scale-[1.04]"
           />
         </Link>
 

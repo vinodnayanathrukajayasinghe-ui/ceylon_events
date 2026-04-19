@@ -58,7 +58,7 @@ export function LoadingScreen() {
           <img
             src={logo}
             alt="Ceylon Kandy Events"
-            className="relative h-32 w-auto opacity-90 drop-shadow-[0_0_20px_rgba(212,175,55,0.5)]"
+            className="logo-premium-gold relative h-48 w-auto opacity-95 drop-shadow-[0_0_28px_rgba(212,175,55,0.62)]"
           />
         </div>
         <p className="font-display text-sm tracking-[0.4em] text-gold uppercase shimmer-gold">
