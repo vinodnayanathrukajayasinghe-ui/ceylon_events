@@ -37,7 +37,7 @@ export function SiteHeader() {
         scrolled ? "bg-onyx/85 backdrop-blur-xl border-b border-gold-soft" : "bg-transparent"
       }`}
     >
-      <div className="container-luxe flex items-center justify-between h-[5.6rem] md:h-[6.2rem]">
+      <div className="container-luxe flex items-center justify-between h-[6.4rem] md:h-[7.2rem] lg:h-[7.8rem]">
         <Link
           to="/"
           className="relative flex items-center gap-3 group shrink-0"
@@ -45,26 +45,26 @@ export function SiteHeader() {
         >
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute -inset-7 rounded-full bg-[radial-gradient(circle,rgba(244,202,89,0.34),transparent_62%)] blur-2xl opacity-75 animate-logo-glow"
+            className="pointer-events-none absolute -inset-10 rounded-full bg-[radial-gradient(circle,rgba(244,202,89,0.38),transparent_62%)] blur-3xl opacity-80 animate-logo-glow"
           />
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute -left-10 right-0 top-1/2 h-14 -translate-y-1/2 bg-gradient-to-r from-transparent via-gold-bright/80 to-transparent blur-xl opacity-80 animate-logo-sheen"
+            className="pointer-events-none absolute -left-14 right-0 top-1/2 h-20 -translate-y-1/2 bg-gradient-to-r from-transparent via-gold-bright/80 to-transparent blur-xl opacity-85 animate-logo-sheen"
           />
           <img
             src={logo}
             alt={SITE.name}
-            className="relative h-[3.3rem] md:h-[4.4rem] lg:h-[5rem] w-auto max-w-[10rem] md:max-w-[13rem] lg:max-w-[15rem] drop-shadow-[0_0_22px_rgba(212,175,55,0.34)] transition-transform duration-500 group-hover:scale-[1.06]"
+            className="relative h-[4.9rem] md:h-[6.2rem] lg:h-[8.4rem] w-auto max-w-[14rem] md:max-w-[18rem] lg:max-w-[24rem] drop-shadow-[0_0_26px_rgba(212,175,55,0.38)] transition-transform duration-500 group-hover:scale-[1.05]"
           />
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
+        <nav className="hidden lg:flex items-center gap-5 xl:gap-6">
           {NAV.map((n) => (
             <Link
               key={n.to}
               to={n.to}
-              className="relative text-sm uppercase tracking-[0.18em] text-ivory/80 hover:text-gold transition-colors py-2"
+              className="relative text-[13px] uppercase tracking-[0.16em] text-ivory/80 hover:text-gold transition-colors py-2"
               activeProps={{ className: "text-gold" }}
               activeOptions={{ exact: n.to === "/" }}
             >
@@ -77,7 +77,7 @@ export function SiteHeader() {
           {isAdmin && (
             <Link
               to="/admin"
-              className="px-3 py-2.5 text-xs uppercase tracking-[0.2em] text-gold/80 hover:text-gold inline-flex items-center gap-1.5"
+              className="px-3 py-2.5 text-[11px] uppercase tracking-[0.18em] text-gold/80 hover:text-gold inline-flex items-center gap-1.5"
               title="Admin"
             >
               <Shield size={14} /> Admin
@@ -85,13 +85,13 @@ export function SiteHeader() {
           )}
           <Link
             to="/book"
-            className="px-4 xl:px-5 py-2.5 text-xs uppercase tracking-[0.2em] border border-gold text-gold hover:bg-gold hover:text-primary-foreground transition-all duration-300 rounded-sm"
+            className="px-3.5 xl:px-4 py-2.5 text-[11px] uppercase tracking-[0.18em] border border-gold text-gold hover:bg-gold hover:text-primary-foreground transition-all duration-300 rounded-sm"
           >
             Book Event
           </Link>
           <Link
             to="/tickets"
-            className="px-4 xl:px-5 py-2.5 text-xs uppercase tracking-[0.2em] bg-gradient-gold text-primary-foreground hover:shadow-gold transition-all duration-300 rounded-sm font-medium"
+            className="px-3.5 xl:px-4 py-2.5 text-[11px] uppercase tracking-[0.18em] bg-gradient-gold text-primary-foreground hover:shadow-gold transition-all duration-300 rounded-sm font-medium"
           >
             Buy Tickets
           </Link>
