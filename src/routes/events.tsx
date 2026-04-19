@@ -4,6 +4,7 @@ import { Calendar, MapPin, ArrowRight } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { SectionHeading } from "@/components/SectionHeading";
 import { supabase } from "@/integrations/supabase/client";
+import { getFallbackEventImage, normalizeEvent } from "@/lib/event-content";
 import g1 from "@/assets/gallery-1.jpg";
 import g2 from "@/assets/gallery-2.jpg";
 import g3 from "@/assets/gallery-3.jpg";
@@ -117,8 +118,6 @@ const FALLBACK = [
   },
 ];
 
-const FILTERS = ["All", "Gala", "Concert", "Party", "Fashion", "Cultural"] as const;
-
 interface EventRow {
   id: string;
   slug: string;
@@ -135,9 +134,9 @@ interface EventRow {
 }
 
 function EventsPage() {
-  const [events, setEvents] = useState<EventRow[]>(FALLBACK);
+  const [events, setEvents] = useState<EventRow[]>(FALLBACK.map((event) => normalizeEvent(event)));
   const [loaded, setLoaded] = useState(false);
-  const [filter, setFilter] = useState<(typeof FILTERS)[number]>("All");
+  const [filter, setFilter] = useState("All");
 
   useEffect(() => {
     supabase
@@ -152,11 +151,16 @@ function EventsPage() {
           return;
         }
 
-        setEvents(data && data.length > 0 ? (data as EventRow[]) : FALLBACK);
+        setEvents(
+          data && data.length > 0
+            ? (data as EventRow[]).map((event) => normalizeEvent(event))
+            : FALLBACK.map((event) => normalizeEvent(event)),
+        );
         setLoaded(true);
       });
   }, []);
 
+  const filters = ["All", ...new Set(events.map((event) => event.category).filter(Boolean))];
   const filtered = filter === "All" ? events : events.filter((e) => e.category === filter);
 
   return (
@@ -173,7 +177,7 @@ function EventsPage() {
 
       <section className="container-luxe">
         <div className="flex flex-wrap justify-center gap-3 mb-12">
-          {FILTERS.map((f) => (
+          {filters.map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
@@ -203,6 +207,9 @@ function EventsPage() {
                   src={e.banner_url || g1}
                   alt={e.title}
                   loading="lazy"
+                  onError={(event) => {
+                    event.currentTarget.src = getFallbackEventImage(e);
+                  }}
                   className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-onyx via-onyx/40 to-transparent" />

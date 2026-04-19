@@ -4,6 +4,7 @@ import { Calendar, MapPin, Ticket as TicketIcon } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { SectionHeading } from "@/components/SectionHeading";
 import { supabase } from "@/integrations/supabase/client";
+import { getFallbackEventImage, normalizeEvent } from "@/lib/event-content";
 import g1 from "@/assets/gallery-1.jpg";
 import g2 from "@/assets/gallery-2.jpg";
 import g3 from "@/assets/gallery-3.jpg";
@@ -73,7 +74,7 @@ interface TicketEventRow {
 }
 
 function TicketsPage() {
-  const [events, setEvents] = useState<TicketEventRow[]>(FALLBACK);
+  const [events, setEvents] = useState<TicketEventRow[]>(FALLBACK.map((event) => normalizeEvent(event)));
 
   useEffect(() => {
     supabase
@@ -88,7 +89,9 @@ function TicketsPage() {
           return;
         }
 
-        if (data && data.length > 0) setEvents(data as TicketEventRow[]);
+        if (data && data.length > 0) {
+          setEvents((data as TicketEventRow[]).map((event) => normalizeEvent(event)));
+        }
       });
   }, []);
 
@@ -112,7 +115,14 @@ function TicketsPage() {
               className="grid md:grid-cols-3 gap-0 border border-gold-soft bg-charcoal hover:border-gold transition-all duration-500 overflow-hidden"
             >
               <div className="md:col-span-1 aspect-[4/3] md:aspect-auto overflow-hidden">
-                <img src={e.banner_url || g1} alt={e.title} className="size-full object-cover" />
+                <img
+                  src={e.banner_url || g1}
+                  alt={e.title}
+                  onError={(event) => {
+                    event.currentTarget.src = getFallbackEventImage(e);
+                  }}
+                  className="size-full object-cover"
+                />
               </div>
               <div className="md:col-span-2 p-8 md:p-10 flex flex-col justify-between gap-6">
                 <div>
