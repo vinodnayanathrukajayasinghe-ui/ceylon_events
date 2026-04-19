@@ -1,7 +1,19 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { SectionHeading } from "@/components/SectionHeading";
-import { ArrowRight, Crown, Heart, Building2, Music, Sparkles, Mic2, PartyPopper, Camera, Users, Gem, Lightbulb, Megaphone } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import iconCorporate from "@/assets/services/corporate-galas.png";
+import iconWeddings from "@/assets/services/luxury-weddings.png";
+import iconPrivate from "@/assets/services/private-celebrations.png";
+import iconConcerts from "@/assets/services/concerts-festivals.png";
+import iconBrand from "@/assets/services/brand-launches.png";
+import iconLive from "@/assets/services/live-entertainment.png";
+import iconVenue from "@/assets/services/venue-coordination.png";
+import iconProduction from "@/assets/services/event-production.png";
+import iconDecor from "@/assets/services/decor-styling.png";
+import iconVip from "@/assets/services/vip-management.png";
+import iconContent from "@/assets/services/content-coverage.png";
+import iconConcierge from "@/assets/services/concierge-hospitality.png";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
@@ -16,18 +28,18 @@ export const Route = createFileRoute("/services")({
 });
 
 const SERVICES = [
-  { icon: Crown, title: "Corporate Galas", desc: "Boardroom-grade galas, summits, awards nights and executive retreats produced with white-glove discretion." },
-  { icon: Heart, title: "Luxury Weddings", desc: "Cinematic weddings — palace, beach, desert or yacht. Curated end-to-end from styling to honeymoon coordination." },
-  { icon: PartyPopper, title: "Private Celebrations", desc: "Birthdays, anniversaries, family gatherings — bespoke celebrations hosted with absolute confidentiality." },
-  { icon: Music, title: "Concerts & Festivals", desc: "Full festival production — staging, sound, lighting, ticketing, artist liaison and security." },
-  { icon: Megaphone, title: "Brand Launches", desc: "Product reveals and brand activations engineered for press, social and word-of-mouth resonance." },
-  { icon: Mic2, title: "Live Entertainment", desc: "Curated international DJs, vocalists, dancers, and performance artists across genres." },
-  { icon: Building2, title: "Venue Coordination", desc: "Privileged access to Dubai's most coveted venues — Atlantis, Burj Al Arab, Address Sky View, SLS, and beyond." },
-  { icon: Lightbulb, title: "Event Production", desc: "AV, lighting, staging, scenography and rigging — engineered to broadcast and cinema standards." },
-  { icon: Sparkles, title: "Decor & Styling", desc: "Floral, tablescape, lounge and atmospheric design that transforms any venue into a private world." },
-  { icon: Users, title: "VIP Management", desc: "Hospitality concierge for royal, celebrity and executive guests — arrivals, suites, security, and itineraries." },
-  { icon: Camera, title: "Content & Coverage", desc: "Cinematic videography, editorial photography and live social coverage during your event." },
-  { icon: Gem, title: "Concierge & Hospitality", desc: "After-event journeys — yachts, dining, retreats and bespoke gifting curated to each guest." },
+  { icon: iconCorporate, title: "Corporate Galas", desc: "Boardroom-grade galas, summits, awards nights and executive retreats produced with white-glove discretion." },
+  { icon: iconWeddings, title: "Luxury Weddings", desc: "Cinematic weddings — palace, beach, desert or yacht. Curated end-to-end from styling to honeymoon coordination." },
+  { icon: iconPrivate, title: "Private Celebrations", desc: "Birthdays, anniversaries, family gatherings — bespoke celebrations hosted with absolute confidentiality." },
+  { icon: iconConcerts, title: "Concerts & Festivals", desc: "Full festival production — staging, sound, lighting, ticketing, artist liaison and security." },
+  { icon: iconBrand, title: "Brand Launches", desc: "Product reveals and brand activations engineered for press, social and word-of-mouth resonance." },
+  { icon: iconLive, title: "Live Entertainment", desc: "Curated international DJs, vocalists, dancers, and performance artists across genres." },
+  { icon: iconVenue, title: "Venue Coordination", desc: "Privileged access to Dubai's most coveted venues — Atlantis, Burj Al Arab, Address Sky View, SLS, and beyond." },
+  { icon: iconProduction, title: "Event Production", desc: "AV, lighting, staging, scenography and rigging — engineered to broadcast and cinema standards." },
+  { icon: iconDecor, title: "Decor & Styling", desc: "Floral, tablescape, lounge and atmospheric design that transforms any venue into a private world." },
+  { icon: iconVip, title: "VIP Management", desc: "Hospitality concierge for royal, celebrity and executive guests — arrivals, suites, security, and itineraries." },
+  { icon: iconContent, title: "Content & Coverage", desc: "Cinematic videography, editorial photography and live social coverage during your event." },
+  { icon: iconConcierge, title: "Concierge & Hospitality", desc: "After-event journeys — yachts, dining, retreats and bespoke gifting curated to each guest." },
 ];
 
 function ServicesPage() {
@@ -49,9 +61,11 @@ function ServicesPage() {
       <section className="py-24">
         <div className="container-luxe">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-gold-soft/40 border border-gold-soft">
-            {SERVICES.map(({ icon: Icon, title, desc }) => (
+            {SERVICES.map(({ icon, title, desc }) => (
               <div key={title} className="bg-onyx p-10 hover:bg-charcoal transition-all duration-500 group cursor-pointer">
-                <Icon size={28} className="text-gold mb-6 group-hover:scale-110 transition-transform" />
+                <div className="mb-6 size-16 grid place-items-center">
+                  <img src={icon} alt={title} loading="lazy" width={64} height={64} className="size-16 object-contain group-hover:scale-110 transition-transform duration-500" />
+                </div>
                 <h3 className="font-display text-2xl text-ivory mb-3 group-hover:text-gold transition-colors">{title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{desc}</p>
               </div>
