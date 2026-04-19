@@ -18,6 +18,12 @@ import logoJunctions from "@/assets/partner-junctions-blast.png";
 import logoAcademy from "@/assets/partner-ceylon-models-academy.png";
 import logoMain from "@/assets/logo-ceylon-kandy.png";
 import founderPortrait from "@/assets/sameera-portrait.png";
+import serviceModeling from "@/assets/services/modeling-events-luxe.jpg";
+import servicePrivate from "@/assets/services/private-parties-luxe.jpg";
+import serviceLiveShows from "@/assets/services/live-shows-luxe.jpg";
+import serviceHighVoltage from "@/assets/services/high-voltage-entertainment-luxe.jpg";
+import serviceStageShows from "@/assets/services/stage-shows-luxe.jpg";
+import serviceTicketed from "@/assets/services/ticketed-nights-luxe.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -32,18 +38,36 @@ export const Route = createFileRoute("/")({
 });
 
 const SERVICES = [
-  { title: "Modeling Events", desc: "Runway moments, cast direction, and fashion-forward staging." },
-  { title: "Private Parties", desc: "Bold nightlife energy curated for premium guest lists." },
-  { title: "Live Shows", desc: "Sensational performers, band setups, and concert-style execution." },
-  { title: "High-Voltage Entertainment", desc: "Lighting, sound, and crowd energy that fills the room." },
-  { title: "Stage Shows", desc: "Immersive production for headline-worthy live experiences." },
-  { title: "Ticketed Nights", desc: "Sell-out concepts built for buzz, bookings, and repeat crowds." },
-  { title: "Brand Launches", desc: "Loud first impressions that people talk about after midnight." },
-  { title: "VIP Hosting", desc: "Fast, polished guest management for high-profile arrivals." },
-  { title: "Venue Coordination", desc: "Dubai venues transformed into statement-making party spaces." },
-  { title: "Event Production", desc: "Audio, staging, truss, and show flow handled end-to-end." },
-  { title: "Decor & Styling", desc: "Club-lit atmospheres with a premium visual signature." },
-  { title: "Talent Coordination", desc: "Bands, DJs, dancers, hosts, and special act programming." },
+  {
+    title: "Modeling Events",
+    desc: "Luxury fashion showcases with runway precision, cinematic spotlights, and elevated guest experience.",
+    img: serviceModeling,
+  },
+  {
+    title: "Private Parties",
+    desc: "VIP nights layered with champagne service, tailored hosting, and a refined golden after-dark mood.",
+    img: servicePrivate,
+  },
+  {
+    title: "Live Shows",
+    desc: "Concert-grade live performances executed with polished staging, crowd flow, and premium show calling.",
+    img: serviceLiveShows,
+  },
+  {
+    title: "High-Voltage Entertainment",
+    desc: "DJ-led energy, intelligent lighting, and immersive sound design for nights that stay unforgettable.",
+    img: serviceHighVoltage,
+  },
+  {
+    title: "Stage Shows",
+    desc: "Dramatic production concepts with theatrical lighting, choreography, and statement-making visual control.",
+    img: serviceStageShows,
+  },
+  {
+    title: "Ticketed Nights",
+    desc: "Buzz-driven entry experiences with curated guest flow, exclusivity, and premium nightlife appeal.",
+    img: serviceTicketed,
+  },
 ];
 
 const FEATURED = [
@@ -153,7 +177,7 @@ function HomePage() {
               <br />
               People Keep <span className="text-gradient-gold italic">Talking About</span>
             </h1>
-            <p className="mt-8 max-w-xl text-lg text-ivory/75 leading-relaxed">
+            <p className="section-copy mt-8 max-w-xl text-lg text-ivory/75">
               Bringing the energy and excitement that keeps people talking. Stunning modeling
               events, sensational live shows, and high-voltage entertainment designed for premium
               crowds and unforgettable nights.
@@ -283,23 +307,35 @@ function HomePage() {
           <SectionHeading
             eyebrow="What We Do"
             title="Premium Services"
-            subtitle="A complete luxury event ecosystem under one trusted name."
+            subtitle="Six signature service pillars shaped with cinematic production, nightlife polish, and black-gold brand discipline."
           />
-          <div className="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-gold-soft/40 border border-gold-soft">
-            {SERVICES.map((s, i) => (
-              <div
-                key={i}
-                className="bg-onyx p-8 hover:bg-charcoal transition-all duration-500 group cursor-pointer"
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {SERVICES.map((s) => (
+              <article
+                key={s.title}
+                className="service-panel group rounded-[1.5rem] border border-gold-soft shadow-gold transition-all duration-500 hover:-translate-y-1 hover:border-gold hover:shadow-gold-lg"
               >
-                <Sparkles
-                  size={20}
-                  className="text-gold mb-5 group-hover:scale-125 transition-transform"
-                />
-                <h3 className="font-display text-xl text-ivory mb-2 group-hover:text-gold transition-colors">
-                  {s.title}
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
-              </div>
+                <div className="service-panel__media">
+                  <img
+                    src={s.img}
+                    alt={s.title}
+                    loading="lazy"
+                    className="service-panel__image"
+                  />
+                </div>
+                <div className="service-panel__body">
+                  <Sparkles
+                    size={18}
+                    className="mb-5 text-gold transition-transform duration-500 group-hover:scale-125"
+                  />
+                  <h3 className="font-display text-[1.9rem] leading-[0.98] text-ivory transition-colors duration-500 group-hover:text-gold">
+                    {s.title}
+                  </h3>
+                  <p className="section-copy mt-4 text-sm text-muted-foreground">
+                    {s.desc}
+                  </p>
+                </div>
+              </article>
             ))}
           </div>
           <div className="text-center mt-14">

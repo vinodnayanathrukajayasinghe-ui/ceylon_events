@@ -64,7 +64,7 @@ export function SiteHeader() {
             <Link
               key={n.to}
               to={n.to}
-              className="relative text-[13px] uppercase tracking-[0.16em] text-ivory/80 hover:text-gold transition-colors py-2"
+              className="relative font-body text-[13px] font-semibold uppercase tracking-[0.18em] text-ivory/80 hover:text-gold transition-colors py-2"
               activeProps={{ className: "text-gold" }}
               activeOptions={{ exact: n.to === "/" }}
             >
@@ -77,7 +77,7 @@ export function SiteHeader() {
           {isAdmin && (
             <Link
               to="/admin"
-              className="px-3 py-2.5 text-[11px] uppercase tracking-[0.18em] text-gold/80 hover:text-gold inline-flex items-center gap-1.5"
+              className="inline-flex items-center gap-1.5 px-3 py-2.5 font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-gold/80 hover:text-gold"
               title="Admin"
             >
               <Shield size={14} /> Admin
@@ -85,13 +85,13 @@ export function SiteHeader() {
           )}
           <Link
             to="/book"
-            className="px-3.5 xl:px-4 py-2.5 text-[11px] uppercase tracking-[0.18em] border border-gold text-gold hover:bg-gold hover:text-primary-foreground transition-all duration-300 rounded-sm"
+            className="px-3.5 xl:px-4 py-2.5 font-body text-[11px] font-semibold uppercase tracking-[0.18em] border border-gold text-gold hover:bg-gold hover:text-primary-foreground transition-all duration-300 rounded-sm"
           >
             Book Event
           </Link>
           <Link
             to="/tickets"
-            className="px-3.5 xl:px-4 py-2.5 text-[11px] uppercase tracking-[0.18em] bg-gradient-gold text-primary-foreground hover:shadow-gold transition-all duration-300 rounded-sm font-medium"
+            className="px-3.5 xl:px-4 py-2.5 font-body text-[11px] font-semibold uppercase tracking-[0.18em] bg-gradient-gold text-primary-foreground hover:shadow-gold transition-all duration-300 rounded-sm"
           >
             Buy Tickets
           </Link>
@@ -114,7 +114,7 @@ export function SiteHeader() {
               <Link
                 key={n.to}
                 to={n.to}
-                className="py-3 text-sm uppercase tracking-[0.2em] text-ivory/80 border-b border-gold-soft/30"
+                className="py-3 font-body text-sm font-semibold uppercase tracking-[0.2em] text-ivory/80 border-b border-gold-soft/30"
                 activeProps={{ className: "text-gold" }}
                 activeOptions={{ exact: n.to === "/" }}
               >
@@ -124,13 +124,13 @@ export function SiteHeader() {
             <div className="grid grid-cols-2 gap-3 pt-5">
               <Link
                 to="/book"
-                className="py-3 text-center text-xs uppercase tracking-[0.2em] border border-gold text-gold rounded-sm"
+                className="py-3 text-center font-body text-xs font-semibold uppercase tracking-[0.2em] border border-gold text-gold rounded-sm"
               >
                 Book Event
               </Link>
               <Link
                 to="/tickets"
-                className="py-3 text-center text-xs uppercase tracking-[0.2em] bg-gradient-gold text-primary-foreground rounded-sm font-medium"
+                className="py-3 text-center font-body text-xs font-semibold uppercase tracking-[0.2em] bg-gradient-gold text-primary-foreground rounded-sm"
               >
                 Buy Tickets
               </Link>

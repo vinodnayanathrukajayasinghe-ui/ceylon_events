@@ -52,7 +52,7 @@ function ServicesPage() {
           <h1 className="font-display text-5xl md:text-7xl text-ivory leading-[1.05] max-w-4xl mx-auto">
             Premium services, <span className="text-gradient-gold italic">flawlessly</span> orchestrated.
           </h1>
-          <p className="mt-8 text-lg text-ivory/75 max-w-2xl mx-auto leading-relaxed">
+          <p className="section-copy mt-8 text-lg text-ivory/75 max-w-2xl mx-auto">
             From the first concept sketch to the final firework, every element of your event lives under one trusted house.
           </p>
         </div>
@@ -95,9 +95,9 @@ function ServicesPage() {
               { n: "04", t: "Delight", d: "On-night excellence and a curated post-event aftercare experience." },
             ].map((s) => (
               <div key={s.n} className="relative">
-                <p className="font-display text-7xl text-gradient-gold/40 leading-none">{s.n}</p>
+                <p className="stat-number text-gradient-gold opacity-45">{s.n}</p>
                 <h3 className="font-display text-2xl text-ivory mt-4">{s.t}</h3>
-                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{s.d}</p>
+                <p className="section-copy mt-3 text-sm text-muted-foreground">{s.d}</p>
               </div>
             ))}
           </div>

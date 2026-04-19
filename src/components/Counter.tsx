@@ -39,11 +39,11 @@ export function Counter({ end, suffix = "", duration = 1800, label }: Props) {
 
   return (
     <div ref={ref} className="text-center">
-      <div className="font-display text-5xl md:text-6xl lg:text-7xl text-gradient-gold leading-none">
+      <div className="stat-number text-gradient-gold">
         {val}
         {suffix}
       </div>
-      <div className="mt-3 text-xs tracking-[0.3em] text-ivory/60 uppercase">{label}</div>
+      <div className="stat-label mt-4 text-ivory/62">{label}</div>
     </div>
   );
 }
