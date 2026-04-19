@@ -21,6 +21,15 @@ interface Props {
   currency: string;
 }
 
+function createOrderReference() {
+  const random =
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID().replace(/-/g, "").slice(0, 8).toUpperCase()
+      : Math.random().toString(36).slice(2, 10).toUpperCase();
+
+  return `CKE-${random}`;
+}
+
 const schema = z.object({
   customer_name: z.string().trim().min(2, "Name required").max(100),
   customer_email: z.string().trim().email("Invalid email").max(255),
@@ -68,30 +77,29 @@ export function TicketCheckout({ eventId, eventTitle, currency }: Props) {
       toast.error(`Only ${remaining} tickets remaining in this tier.`);
       return;
     }
+
+    const orderReference = createOrderReference();
     setSubmitting(true);
-    const { data, error } = await supabase
-      .from("ticket_orders")
-      .insert({
-        event_id: eventId,
-        ticket_category_id: selected.id,
-        user_id: user?.id ?? null,
-        customer_name: form.customer_name.trim(),
-        customer_email: form.customer_email.trim(),
-        customer_phone: form.customer_phone.trim(),
-        quantity: qty,
-        unit_price: selected.price,
-        total_amount: selected.price * qty,
-        currency,
-        payment_status: "pending",
-      })
-      .select("order_reference")
-      .single();
+    const { error } = await supabase.from("ticket_orders").insert({
+      event_id: eventId,
+      ticket_category_id: selected.id,
+      user_id: user?.id ?? null,
+      customer_name: form.customer_name.trim(),
+      customer_email: form.customer_email.trim(),
+      customer_phone: form.customer_phone.trim(),
+      quantity: qty,
+      unit_price: selected.price,
+      total_amount: selected.price * qty,
+      currency,
+      order_reference: orderReference,
+      payment_status: "pending",
+    });
     setSubmitting(false);
     if (error) {
       toast.error(error.message);
       return;
     }
-    setDone({ ref: data.order_reference });
+    setDone({ ref: orderReference });
     toast.success("Order placed. We'll be in touch to confirm payment.");
   };
 
@@ -108,8 +116,13 @@ export function TicketCheckout({ eventId, eventTitle, currency }: Props) {
       <div className="border border-gold p-8 bg-gradient-to-b from-charcoal to-onyx text-center">
         <Ticket className="text-gold mx-auto mb-3" size={28} />
         <p className="font-display text-2xl text-ivory mb-2">Tickets Coming Soon</p>
-        <p className="text-sm text-muted-foreground mb-5">Reserve your seat by enquiring directly with our team.</p>
-        <Link to="/contact" className="inline-block px-6 py-3 border border-gold text-gold uppercase tracking-[0.2em] text-xs hover:bg-gold hover:text-primary-foreground transition-all">
+        <p className="text-sm text-muted-foreground mb-5">
+          Reserve your seat by enquiring directly with our team.
+        </p>
+        <Link
+          to="/contact"
+          className="inline-block px-6 py-3 border border-gold text-gold uppercase tracking-[0.2em] text-xs hover:bg-gold hover:text-primary-foreground transition-all"
+        >
           Enquire Now
         </Link>
       </div>
@@ -125,8 +138,13 @@ export function TicketCheckout({ eventId, eventTitle, currency }: Props) {
         <p className="font-display text-2xl text-ivory mb-1">Order Received</p>
         <p className="text-xs text-muted-foreground mb-4">Reference</p>
         <p className="font-display text-2xl text-gradient-gold tracking-wider mb-5">{done.ref}</p>
-        <p className="text-sm text-ivory/80 mb-6">Our concierge will contact you within 24 hours to confirm payment & deliver tickets.</p>
-        <Link to="/my-bookings" className="inline-block px-6 py-3 bg-gradient-gold text-primary-foreground uppercase tracking-[0.2em] text-xs rounded-sm">
+        <p className="text-sm text-ivory/80 mb-6">
+          Our concierge will contact you within 24 hours to confirm payment & deliver tickets.
+        </p>
+        <Link
+          to="/my-bookings"
+          className="inline-block px-6 py-3 bg-gradient-gold text-primary-foreground uppercase tracking-[0.2em] text-xs rounded-sm"
+        >
           View My Orders
         </Link>
       </div>
@@ -134,7 +152,10 @@ export function TicketCheckout({ eventId, eventTitle, currency }: Props) {
   }
 
   return (
-    <form onSubmit={submit} className="border border-gold p-8 bg-gradient-to-b from-charcoal to-onyx space-y-6">
+    <form
+      onSubmit={submit}
+      className="border border-gold p-8 bg-gradient-to-b from-charcoal to-onyx space-y-6"
+    >
       <div>
         <p className="text-[10px] tracking-[0.4em] text-gold uppercase mb-3">Select Tier</p>
         <div className="space-y-2">
@@ -155,9 +176,13 @@ export function TicketCheckout({ eventId, eventTitle, currency }: Props) {
               >
                 <div className="flex items-baseline justify-between gap-3">
                   <p className="font-display text-lg text-ivory">{c.name}</p>
-                  <p className="font-display text-xl text-gradient-gold">{currency} {c.price}</p>
+                  <p className="font-display text-xl text-gradient-gold">
+                    {currency} {c.price}
+                  </p>
                 </div>
-                {c.description && <p className="text-xs text-muted-foreground mt-1">{c.description}</p>}
+                {c.description && (
+                  <p className="text-xs text-muted-foreground mt-1">{c.description}</p>
+                )}
                 <p className="text-[10px] tracking-[0.3em] uppercase mt-2 text-gold/70">
                   {out ? "Sold Out" : `${left} remaining`}
                 </p>
@@ -170,7 +195,13 @@ export function TicketCheckout({ eventId, eventTitle, currency }: Props) {
       <div>
         <p className="text-[10px] tracking-[0.4em] text-gold uppercase mb-2">Quantity</p>
         <div className="flex items-center gap-3">
-          <button type="button" onClick={() => setQty(Math.max(1, qty - 1))} className="size-10 border border-gold-soft text-gold hover:border-gold">−</button>
+          <button
+            type="button"
+            onClick={() => setQty(Math.max(1, qty - 1))}
+            className="size-10 border border-gold-soft text-gold hover:border-gold"
+          >
+            −
+          </button>
           <input
             type="number"
             min={1}
@@ -179,19 +210,47 @@ export function TicketCheckout({ eventId, eventTitle, currency }: Props) {
             onChange={(e) => setQty(Math.max(1, Math.min(20, Number(e.target.value) || 1)))}
             className="w-16 h-10 bg-onyx border border-gold-soft text-ivory text-center font-display text-lg focus:outline-none focus:border-gold"
           />
-          <button type="button" onClick={() => setQty(Math.min(20, remaining, qty + 1))} className="size-10 border border-gold-soft text-gold hover:border-gold">+</button>
+          <button
+            type="button"
+            onClick={() => setQty(Math.min(20, remaining, qty + 1))}
+            className="size-10 border border-gold-soft text-gold hover:border-gold"
+          >
+            +
+          </button>
         </div>
       </div>
 
       <div className="grid gap-3">
-        <input required placeholder="Full Name" value={form.customer_name} onChange={(e) => setForm({ ...form, customer_name: e.target.value })} className="px-4 py-3 bg-onyx border border-gold-soft text-ivory placeholder:text-muted-foreground focus:outline-none focus:border-gold" />
-        <input required type="email" placeholder="Email" value={form.customer_email} onChange={(e) => setForm({ ...form, customer_email: e.target.value })} className="px-4 py-3 bg-onyx border border-gold-soft text-ivory placeholder:text-muted-foreground focus:outline-none focus:border-gold" />
-        <input required type="tel" placeholder="WhatsApp / Phone" value={form.customer_phone} onChange={(e) => setForm({ ...form, customer_phone: e.target.value })} className="px-4 py-3 bg-onyx border border-gold-soft text-ivory placeholder:text-muted-foreground focus:outline-none focus:border-gold" />
+        <input
+          required
+          placeholder="Full Name"
+          value={form.customer_name}
+          onChange={(e) => setForm({ ...form, customer_name: e.target.value })}
+          className="px-4 py-3 bg-onyx border border-gold-soft text-ivory placeholder:text-muted-foreground focus:outline-none focus:border-gold"
+        />
+        <input
+          required
+          type="email"
+          placeholder="Email"
+          value={form.customer_email}
+          onChange={(e) => setForm({ ...form, customer_email: e.target.value })}
+          className="px-4 py-3 bg-onyx border border-gold-soft text-ivory placeholder:text-muted-foreground focus:outline-none focus:border-gold"
+        />
+        <input
+          required
+          type="tel"
+          placeholder="WhatsApp / Phone"
+          value={form.customer_phone}
+          onChange={(e) => setForm({ ...form, customer_phone: e.target.value })}
+          className="px-4 py-3 bg-onyx border border-gold-soft text-ivory placeholder:text-muted-foreground focus:outline-none focus:border-gold"
+        />
       </div>
 
       <div className="border-t border-gold-soft pt-5 flex items-baseline justify-between">
         <p className="text-[10px] tracking-[0.4em] text-gold uppercase">Total</p>
-        <p className="font-display text-3xl text-gradient-gold">{currency} {total.toLocaleString()}</p>
+        <p className="font-display text-3xl text-gradient-gold">
+          {currency} {total.toLocaleString()}
+        </p>
       </div>
 
       <button
