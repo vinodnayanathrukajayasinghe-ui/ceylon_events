@@ -1,5 +1,6 @@
 import { Outlet, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
+import logo from "@/assets/logo-ceylon-kandy.png";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { SiteLayout } from "@/components/SiteLayout";
 import { AuthProvider } from "@/lib/auth";
@@ -15,7 +16,10 @@ function NotFoundComponent() {
         <p className="mt-6 text-muted-foreground max-w-md mx-auto">
           The page you're looking for has moved or no longer exists.
         </p>
-        <a href="/" className="mt-10 inline-block px-8 py-3 bg-gradient-gold text-primary-foreground uppercase tracking-[0.2em] text-xs rounded-sm">
+        <a
+          href="/"
+          className="mt-10 inline-block px-8 py-3 bg-gradient-gold text-primary-foreground uppercase tracking-[0.2em] text-xs rounded-sm"
+        >
           Return Home
         </a>
       </div>
@@ -45,7 +49,7 @@ export const Route = createRootRoute({
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter+Tight:wght@300;400;500;600;700&display=swap",
       },
-      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "icon", type: "image/png", href: logo },
     ],
   }),
   shellComponent: RootShell,
