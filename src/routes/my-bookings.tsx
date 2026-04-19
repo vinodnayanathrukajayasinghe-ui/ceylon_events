@@ -27,8 +27,19 @@ function MyBookingsPage() {
 
   useEffect(() => {
     if (!user) return;
-    supabase.from("bookings").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).then(({ data }) => setBookings(data ?? []));
-    supabase.from("ticket_orders").select("*, events(title, event_date, venue)").eq("user_id", user.id).order("created_at", { ascending: false }).then(({ data }) => setOrders(data ?? []));
+    // RLS now allows match by user_id OR matching email — fetch everything tied to this user
+    supabase
+      .from("bookings")
+      .select("*")
+      .or(`user_id.eq.${user.id},customer_email.eq.${user.email}`)
+      .order("created_at", { ascending: false })
+      .then(({ data }) => setBookings(data ?? []));
+    supabase
+      .from("ticket_orders")
+      .select("*, events(title, event_date, venue)")
+      .or(`user_id.eq.${user.id},customer_email.eq.${user.email}`)
+      .order("created_at", { ascending: false })
+      .then(({ data }) => setOrders(data ?? []));
   }, [user]);
 
   if (loading || !user) {
