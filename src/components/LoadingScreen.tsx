@@ -25,7 +25,7 @@ export function LoadingScreen() {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-onyx"
+      className="pointer-events-none fixed inset-0 z-[100] flex items-center justify-center bg-onyx"
       style={{ animation: "loader-fade-out 2.1s ease-in-out forwards" }}
       aria-hidden="true"
     >
