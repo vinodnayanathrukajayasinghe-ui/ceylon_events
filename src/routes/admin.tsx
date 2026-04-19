@@ -1,5 +1,15 @@
 import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, CalendarDays, Ticket, Inbox, Mail, LogOut, ArrowLeft } from "lucide-react";
+import {
+  LayoutDashboard,
+  CalendarDays,
+  Ticket,
+  Inbox,
+  Mail,
+  LogOut,
+  ArrowLeft,
+  ShieldCheck,
+  ScanLine,
+} from "lucide-react";
 import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/admin")({
@@ -12,6 +22,9 @@ const ADMIN_NAV: NavItem[] = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/events", label: "Events", icon: CalendarDays },
   { to: "/admin/orders", label: "Ticket Orders", icon: Ticket },
+  { to: "/admin/tickets", label: "Issued Tickets", icon: ShieldCheck },
+  { to: "/admin/verify", label: "Scanner", icon: ScanLine },
+  { to: "/admin/checkins", label: "Check-In Logs", icon: Inbox },
   { to: "/admin/bookings", label: "Bookings", icon: Inbox },
   { to: "/admin/inquiries", label: "Inquiries", icon: Mail },
 ];

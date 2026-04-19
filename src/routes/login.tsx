@@ -5,6 +5,9 @@ import { useAuth } from "@/lib/auth";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/login")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    redirect: typeof search.redirect === "string" ? search.redirect : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Sign In — Ceylon Kandy Events" },
@@ -17,6 +20,7 @@ export const Route = createFileRoute("/login")({
 function LoginPage() {
   const { signIn } = useAuth();
   const navigate = useNavigate();
+  const search = Route.useSearch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,6 +35,11 @@ function LoginPage() {
       return;
     }
     toast.success("Welcome back");
+    if (search.redirect) {
+      navigate({ to: search.redirect as never });
+      return;
+    }
+
     navigate({ to: isAdmin ? "/admin" : "/my-bookings" });
   };
 
