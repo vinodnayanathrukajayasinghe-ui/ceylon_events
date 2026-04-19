@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, X, Shield } from "lucide-react";
-import logo from "@/assets/logo-ceylon-kandy.png";
+import logo from "@/assets/logo-header.png";
 import { SITE } from "@/lib/site";
 import { useAuth } from "@/lib/auth";
 
@@ -37,7 +37,7 @@ export function SiteHeader() {
         scrolled ? "bg-onyx/85 backdrop-blur-xl border-b border-gold-soft" : "bg-transparent"
       }`}
     >
-      <div className="container-luxe flex items-center justify-between h-20">
+      <div className="container-luxe flex items-center justify-between h-[5.6rem] md:h-[6.2rem]">
         <Link
           to="/"
           className="relative flex items-center gap-3 group shrink-0"
@@ -45,21 +45,21 @@ export function SiteHeader() {
         >
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute -inset-5 rounded-full bg-[radial-gradient(circle,rgba(244,202,89,0.32),transparent_62%)] blur-2xl opacity-70 animate-logo-glow"
+            className="pointer-events-none absolute -inset-7 rounded-full bg-[radial-gradient(circle,rgba(244,202,89,0.34),transparent_62%)] blur-2xl opacity-75 animate-logo-glow"
           />
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute -left-8 right-0 top-1/2 h-10 -translate-y-1/2 bg-gradient-to-r from-transparent via-gold-bright/70 to-transparent blur-xl opacity-70 animate-logo-sheen"
+            className="pointer-events-none absolute -left-10 right-0 top-1/2 h-14 -translate-y-1/2 bg-gradient-to-r from-transparent via-gold-bright/80 to-transparent blur-xl opacity-80 animate-logo-sheen"
           />
           <img
             src={logo}
             alt={SITE.name}
-            className="relative h-14 md:h-16 w-auto drop-shadow-[0_0_18px_rgba(212,175,55,0.28)] transition-transform duration-500 group-hover:scale-[1.08]"
+            className="relative h-[3.3rem] md:h-[4.4rem] lg:h-[5rem] w-auto max-w-[10rem] md:max-w-[13rem] lg:max-w-[15rem] drop-shadow-[0_0_22px_rgba(212,175,55,0.34)] transition-transform duration-500 group-hover:scale-[1.06]"
           />
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
           {NAV.map((n) => (
             <Link
               key={n.to}
@@ -85,13 +85,13 @@ export function SiteHeader() {
           )}
           <Link
             to="/book"
-            className="px-5 py-2.5 text-xs uppercase tracking-[0.2em] border border-gold text-gold hover:bg-gold hover:text-primary-foreground transition-all duration-300 rounded-sm"
+            className="px-4 xl:px-5 py-2.5 text-xs uppercase tracking-[0.2em] border border-gold text-gold hover:bg-gold hover:text-primary-foreground transition-all duration-300 rounded-sm"
           >
             Book Event
           </Link>
           <Link
             to="/tickets"
-            className="px-5 py-2.5 text-xs uppercase tracking-[0.2em] bg-gradient-gold text-primary-foreground hover:shadow-gold transition-all duration-300 rounded-sm font-medium"
+            className="px-4 xl:px-5 py-2.5 text-xs uppercase tracking-[0.2em] bg-gradient-gold text-primary-foreground hover:shadow-gold transition-all duration-300 rounded-sm font-medium"
           >
             Buy Tickets
           </Link>

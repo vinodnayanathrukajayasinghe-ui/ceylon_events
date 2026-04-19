@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Sparkles, Calendar, MapPin, Star } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
@@ -73,6 +74,40 @@ const FEATURED = [
 ];
 
 function HomePage() {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [videoReady, setVideoReady] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    let mounted = true;
+    const markReady = () => {
+      if (mounted) setVideoReady(true);
+    };
+
+    const startPlayback = async () => {
+      try {
+        video.muted = true;
+        video.defaultMuted = true;
+        await video.play();
+        markReady();
+      } catch {
+        // Keep the poster image visible when autoplay is blocked.
+      }
+    };
+
+    video.addEventListener("canplay", markReady);
+    video.addEventListener("playing", markReady);
+    void startPlayback();
+
+    return () => {
+      mounted = false;
+      video.removeEventListener("canplay", markReady);
+      video.removeEventListener("playing", markReady);
+    };
+  }, []);
+
   return (
     <SiteLayout>
       {/* HERO */}
@@ -81,22 +116,30 @@ function HomePage() {
           <img
             src={heroImg}
             alt="Luxury Dubai gala"
-            className="size-full object-cover scale-[1.02]"
+            className={`size-full object-cover scale-[1.02] transition-opacity duration-700 ${
+              videoReady ? "opacity-18" : "opacity-100"
+            }`}
           />
           <video
-            className="absolute inset-0 size-full object-cover scale-[1.05] opacity-60"
+            ref={videoRef}
+            className={`absolute inset-0 size-full object-cover scale-[1.06] transition-opacity duration-700 ${
+              videoReady ? "opacity-[0.82]" : "opacity-0"
+            }`}
             autoPlay
             muted
+            defaultMuted
             loop
             playsInline
-            preload="metadata"
+            preload="auto"
             poster={heroImg}
+            onLoadedData={() => setVideoReady(true)}
+            disablePictureInPicture
           >
             <source src={heroVideo} type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,6,4,0.84)_10%,rgba(7,6,4,0.52)_44%,rgba(7,6,4,0.72)_100%)]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-onyx/70 via-onyx/50 to-onyx" />
-          <div className="absolute inset-0 bg-radial-gold opacity-55" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,6,4,0.72)_10%,rgba(7,6,4,0.26)_44%,rgba(7,6,4,0.6)_100%)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-onyx/45 via-onyx/18 to-onyx/78" />
+          <div className="absolute inset-0 bg-radial-gold opacity-42" />
           <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-gold/15 to-transparent opacity-70" />
         </div>
 
@@ -111,8 +154,8 @@ function HomePage() {
               Become <span className="text-gradient-gold italic">Legacy</span>
             </h1>
             <p className="mt-8 max-w-xl text-lg text-ivory/75 leading-relaxed">
-              Ceylon Kandy Events crafts Dubai's most extraordinary celebrations - galas,
-              weddings, brand unveilings, and concerts curated with uncompromising elegance.
+              Ceylon Kandy Events crafts Dubai's most extraordinary celebrations - galas, weddings,
+              brand unveilings, and concerts curated with uncompromising elegance.
             </p>
             <div className="mt-8 inline-flex flex-wrap items-center gap-3 rounded-full border border-gold/25 bg-onyx/45 px-5 py-2.5 backdrop-blur-md">
               <span className="h-2.5 w-2.5 rounded-full bg-gold shadow-[0_0_14px_rgba(212,175,55,0.8)] animate-pulse-gold" />
