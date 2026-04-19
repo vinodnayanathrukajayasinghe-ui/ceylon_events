@@ -21,9 +21,9 @@ import founderPortrait from "@/assets/sameera-portrait.png";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: `${SITE.name} — Luxury Events in Dubai` },
+      { title: `${SITE.name} | Luxury Events in Dubai` },
       { name: "description", content: SITE.description },
-      { property: "og:title", content: `${SITE.name} — Luxury Events in Dubai` },
+      { property: "og:title", content: `${SITE.name} | Luxury Events in Dubai` },
       { property: "og:description", content: SITE.description },
     ],
   }),
@@ -40,7 +40,7 @@ const SERVICES = [
   { title: "Brand Launches", desc: "Unveilings that command headlines." },
   { title: "VIP Management", desc: "White-glove service for discerning guests." },
   { title: "Venue Coordination", desc: "Dubai's finest venues, perfectly secured." },
-  { title: "Event Production", desc: "Light, sound, AV — flawlessly orchestrated." },
+  { title: "Event Production", desc: "Light, sound, AV - flawlessly orchestrated." },
   { title: "Decor & Styling", desc: "Atmospheres that take your breath away." },
   { title: "Talent Coordination", desc: "Top artists, models, and hosts." },
 ];
@@ -103,7 +103,7 @@ function HomePage() {
         <div className="container-luxe relative z-10 py-20">
           <div className="max-w-3xl animate-fade-up">
             <p className="text-xs tracking-[0.5em] text-gold uppercase mb-6">
-              Dubai · United Arab Emirates
+              Dubai - United Arab Emirates
             </p>
             <h1 className="font-display text-5xl md:text-7xl lg:text-8xl leading-[0.95] text-ivory">
               Where <span className="text-gradient-gold italic">Moments</span>
@@ -111,8 +111,8 @@ function HomePage() {
               Become <span className="text-gradient-gold italic">Legacy</span>
             </h1>
             <p className="mt-8 max-w-xl text-lg text-ivory/75 leading-relaxed">
-              Ceylon Kandy Events crafts Dubai's most extraordinary celebrations — galas, weddings,
-              brand unveilings, and concerts curated with uncompromising elegance.
+              Ceylon Kandy Events crafts Dubai's most extraordinary celebrations - galas,
+              weddings, brand unveilings, and concerts curated with uncompromising elegance.
             </p>
             <div className="mt-8 inline-flex flex-wrap items-center gap-3 rounded-full border border-gold/25 bg-onyx/45 px-5 py-2.5 backdrop-blur-md">
               <span className="h-2.5 w-2.5 rounded-full bg-gold shadow-[0_0_14px_rgba(212,175,55,0.8)] animate-pulse-gold" />
