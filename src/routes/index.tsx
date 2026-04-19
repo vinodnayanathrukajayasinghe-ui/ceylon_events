@@ -206,12 +206,9 @@ function HomePage() {
         <div className="container-luxe grid lg:grid-cols-2 gap-16 items-center">
           <div className="relative aspect-[4/5] max-w-md mx-auto w-full">
             <div className="absolute inset-0 -m-3 border border-gold opacity-60" />
-            <div className="relative size-full bg-charcoal grid place-items-center overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-gold-soft" />
-              <img src={logoMain} alt="Sameera Sinhapali" className="relative w-2/3 opacity-40" />
-              <div className="absolute bottom-6 left-6 right-6 text-center">
-                <p className="text-[10px] tracking-[0.4em] text-gold uppercase">Portrait Coming Soon</p>
-              </div>
+            <div className="relative size-full overflow-hidden">
+              <img src={founderPortrait} alt="Sameera Sinhapali, Founder of Ceylon Kandy Events" className="size-full object-cover object-top" />
+              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-onyx via-onyx/40 to-transparent" />
             </div>
           </div>
           <div>
