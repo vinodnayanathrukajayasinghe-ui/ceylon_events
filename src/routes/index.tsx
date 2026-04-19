@@ -5,8 +5,8 @@ import { SiteLayout } from "@/components/SiteLayout";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Counter } from "@/components/Counter";
 import { SITE, whatsappLink } from "@/lib/site";
-import heroImg from "@/assets/hero-gala.jpg";
-import heroVideo from "@/assets/hero-gala-video.mp4";
+import heroImg from "@/assets/hero-band-stage-poster.jpg";
+import heroVideo from "@/assets/hero-band-stage.mp4";
 import g1 from "@/assets/gallery-1.jpg";
 import g2 from "@/assets/gallery-2.jpg";
 import g3 from "@/assets/gallery-3.jpg";
@@ -137,10 +137,10 @@ function HomePage() {
           >
             <source src={heroVideo} type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,6,4,0.72)_10%,rgba(7,6,4,0.26)_44%,rgba(7,6,4,0.6)_100%)]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-onyx/45 via-onyx/18 to-onyx/78" />
-          <div className="absolute inset-0 bg-radial-gold opacity-42" />
-          <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-gold/15 to-transparent opacity-70" />
+          <div className="absolute inset-0 bg-[linear-gradient(95deg,rgba(5,6,20,0.84)_8%,rgba(15,17,58,0.46)_42%,rgba(10,7,28,0.84)_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_34%,rgba(68,64,214,0.34),transparent_34%),radial-gradient(circle_at_78%_18%,rgba(136,64,255,0.18),transparent_28%),radial-gradient(circle_at_70%_78%,rgba(24,78,193,0.22),transparent_30%)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#050816]/55 via-[#120d2d]/18 to-onyx/88" />
+          <div className="absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-[#5b4bff]/18 to-transparent opacity-85" />
         </div>
 
         <div className="container-luxe relative z-10 py-20">
@@ -154,13 +154,14 @@ function HomePage() {
               Become <span className="text-gradient-gold italic">Legacy</span>
             </h1>
             <p className="mt-8 max-w-xl text-lg text-ivory/75 leading-relaxed">
-              Ceylon Kandy Events crafts Dubai's most extraordinary celebrations - galas, weddings,
-              brand unveilings, and concerts curated with uncompromising elegance.
+              Ceylon Kandy Events stages high-end live experiences, private showcases, band
+              productions, and exclusive nights shaped with precision lighting, premium sound, and
+              unmistakable atmosphere.
             </p>
             <div className="mt-8 inline-flex flex-wrap items-center gap-3 rounded-full border border-gold/25 bg-onyx/45 px-5 py-2.5 backdrop-blur-md">
               <span className="h-2.5 w-2.5 rounded-full bg-gold shadow-[0_0_14px_rgba(212,175,55,0.8)] animate-pulse-gold" />
               <span className="text-[11px] uppercase tracking-[0.32em] text-ivory/75">
-                Cinematic Gala Atmosphere
+                Exclusive Live Stage Setup
               </span>
             </div>
             <div className="mt-10 flex flex-wrap gap-4">
@@ -194,9 +195,9 @@ function HomePage() {
             <p className="text-[10px] uppercase tracking-[0.35em] text-gold">Signature Scenes</p>
             <div className="mt-5 space-y-4">
               {[
-                "Luxury galas with live entertainment",
-                "Celebrity-style launches and red carpets",
-                "Immersive weddings and premium private events",
+                "Exclusive band and stage productions",
+                "Private showcases with premium lighting design",
+                "Concert-style setups for luxury audiences",
               ].map((item) => (
                 <div key={item} className="flex items-start gap-3">
                   <span className="mt-1 h-2 w-2 rounded-full bg-gold shadow-[0_0_10px_rgba(212,175,55,0.7)]" />
@@ -234,9 +235,8 @@ function HomePage() {
           />
           <div className="mt-16 grid md:grid-cols-3 gap-8">
             {FEATURED.map((e) => (
-              <Link
-                to="/events/$eventId"
-                params={{ eventId: e.slug }}
+              <a
+                href={`/events/${e.slug}`}
                 key={e.slug}
                 className="group relative overflow-hidden rounded-sm border border-gold-soft bg-charcoal hover:border-gold transition-all duration-500"
               >
@@ -263,7 +263,7 @@ function HomePage() {
                     <span className="text-gold font-medium">{e.price}</span>
                   </div>
                 </div>
-              </Link>
+              </a>
             ))}
           </div>
           <div className="text-center mt-14">

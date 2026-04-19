@@ -196,10 +196,9 @@ function EventsPage() {
       <section className="pb-32">
         <div className="container-luxe grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filtered.map((e) => (
-            <Link
+            <a
               key={e.id}
-              to="/events/$eventId"
-              params={{ eventId: e.slug }}
+              href={`/events/${e.slug}`}
               className="group relative overflow-hidden rounded-sm border border-gold-soft bg-charcoal hover:border-gold transition-all duration-500"
             >
               <div className="aspect-[4/5] overflow-hidden">
@@ -245,7 +244,7 @@ function EventsPage() {
                   View Event <ArrowRight size={12} />
                 </span>
               </div>
-            </Link>
+            </a>
           ))}
         </div>
         {loaded && filtered.length === 0 && (

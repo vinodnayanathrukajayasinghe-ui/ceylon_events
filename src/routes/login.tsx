@@ -24,14 +24,14 @@ function LoginPage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await signIn(email, password);
+    const { error, isAdmin } = await signIn(email, password);
     setLoading(false);
     if (error) {
       toast.error(error);
       return;
     }
     toast.success("Welcome back");
-    navigate({ to: "/my-bookings" });
+    navigate({ to: isAdmin ? "/admin" : "/my-bookings" });
   };
 
   return (

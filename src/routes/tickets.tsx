@@ -152,13 +152,12 @@ function TicketsPage() {
                       Sold Out
                     </span>
                   ) : (
-                    <Link
-                      to="/events/$eventId"
-                      params={{ eventId: e.slug }}
+                    <a
+                      href={`/tickets/${e.slug}`}
                       className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-gold text-primary-foreground uppercase tracking-[0.2em] text-xs font-medium hover:shadow-gold-lg transition-all"
                     >
                       <TicketIcon size={14} /> Get Tickets
-                    </Link>
+                    </a>
                   )}
                 </div>
               </div>

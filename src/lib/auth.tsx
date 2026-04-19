@@ -7,7 +7,7 @@ interface AuthContextValue {
   user: User | null;
   isAdmin: boolean;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: string | null }>;
+  signIn: (email: string, password: string) => Promise<{ error: string | null; isAdmin: boolean }>;
   signUp: (email: string, password: string, displayName?: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
 }
@@ -19,15 +19,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const loadAdminRole = async (userId?: string | null) => {
+    if (!userId) {
+      setIsAdmin(false);
+      return false;
+    }
+
+    const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
+    const admin = !!data?.some((row) => row.role === "admin");
+    setIsAdmin(admin);
+    return admin;
+  };
+
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_evt, sess) => {
       setSession(sess);
       if (sess?.user) {
-        setTimeout(() => {
-          supabase.from("user_roles").select("role").eq("user_id", sess.user.id).then(({ data }) => {
-            setIsAdmin(!!data?.some((r) => r.role === "admin"));
-          });
-        }, 0);
+        void loadAdminRole(sess.user.id);
       } else {
         setIsAdmin(false);
       }
@@ -36,10 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     supabase.auth.getSession().then(({ data: { session: s } }) => {
       setSession(s);
       if (s?.user) {
-        supabase.from("user_roles").select("role").eq("user_id", s.user.id).then(({ data }) => {
-          setIsAdmin(!!data?.some((r) => r.role === "admin"));
-          setLoading(false);
-        });
+        loadAdminRole(s.user.id).finally(() => setLoading(false));
       } else {
         setLoading(false);
       }
@@ -49,8 +54,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return { error: error?.message ?? null };
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      return { error: error.message, isAdmin: false };
+    }
+
+    const admin = await loadAdminRole(data.user?.id ?? null);
+    return { error: null, isAdmin: admin };
   };
 
   const signUp = async (email: string, password: string, displayName?: string) => {
