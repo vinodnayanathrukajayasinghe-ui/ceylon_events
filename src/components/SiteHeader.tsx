@@ -34,14 +34,28 @@ export function SiteHeader() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "bg-onyx/85 backdrop-blur-xl border-b border-gold-soft"
-          : "bg-transparent"
+        scrolled ? "bg-onyx/85 backdrop-blur-xl border-b border-gold-soft" : "bg-transparent"
       }`}
     >
       <div className="container-luxe flex items-center justify-between h-20">
-        <Link to="/" className="flex items-center gap-3 group shrink-0" aria-label={SITE.name}>
-          <img src={logo} alt={SITE.name} className="h-11 md:h-12 w-auto transition-transform group-hover:scale-105" />
+        <Link
+          to="/"
+          className="relative flex items-center gap-3 group shrink-0"
+          aria-label={SITE.name}
+        >
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-5 rounded-full bg-[radial-gradient(circle,rgba(244,202,89,0.32),transparent_62%)] blur-2xl opacity-70 animate-logo-glow"
+          />
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -left-8 right-0 top-1/2 h-10 -translate-y-1/2 bg-gradient-to-r from-transparent via-gold-bright/70 to-transparent blur-xl opacity-70 animate-logo-sheen"
+          />
+          <img
+            src={logo}
+            alt={SITE.name}
+            className="relative h-14 md:h-16 w-auto drop-shadow-[0_0_18px_rgba(212,175,55,0.28)] transition-transform duration-500 group-hover:scale-[1.08]"
+          />
         </Link>
 
         {/* Desktop nav */}
@@ -108,10 +122,16 @@ export function SiteHeader() {
               </Link>
             ))}
             <div className="grid grid-cols-2 gap-3 pt-5">
-              <Link to="/book" className="py-3 text-center text-xs uppercase tracking-[0.2em] border border-gold text-gold rounded-sm">
+              <Link
+                to="/book"
+                className="py-3 text-center text-xs uppercase tracking-[0.2em] border border-gold text-gold rounded-sm"
+              >
                 Book Event
               </Link>
-              <Link to="/tickets" className="py-3 text-center text-xs uppercase tracking-[0.2em] bg-gradient-gold text-primary-foreground rounded-sm font-medium">
+              <Link
+                to="/tickets"
+                className="py-3 text-center text-xs uppercase tracking-[0.2em] bg-gradient-gold text-primary-foreground rounded-sm font-medium"
+              >
                 Buy Tickets
               </Link>
             </div>

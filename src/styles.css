@@ -310,6 +310,35 @@ h6,
   }
 }
 
+@keyframes logo-glow {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.94);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes logo-sheen {
+  0% {
+    transform: translate3d(-120%, -50%, 0);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.82;
+  }
+  52% {
+    opacity: 0.35;
+  }
+  100% {
+    transform: translate3d(135%, -50%, 0);
+    opacity: 0;
+  }
+}
+
 .animate-fade-up {
   animation: fade-up 0.8s ease-out both;
 }
@@ -321,6 +350,12 @@ h6,
 }
 .animate-spin-slow {
   animation: spin-slow 20s linear infinite;
+}
+.animate-logo-glow {
+  animation: logo-glow 4.2s ease-in-out infinite;
+}
+.animate-logo-sheen {
+  animation: logo-sheen 4.8s ease-in-out infinite;
 }
 
 .shimmer-gold {
