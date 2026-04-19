@@ -37,7 +37,7 @@ export function SiteHeader() {
         scrolled ? "bg-onyx/85 backdrop-blur-xl border-b border-gold-soft" : "bg-transparent"
       }`}
     >
-      <div className="container-luxe flex items-center justify-between h-[5.8rem] md:h-[6.3rem] lg:h-[6.7rem]">
+      <div className="container-luxe flex items-center justify-between h-[5rem] md:h-[5.4rem] lg:h-[5.8rem]">
         <Link
           to="/"
           className="relative flex items-center gap-3 group shrink-0"
@@ -45,16 +45,16 @@ export function SiteHeader() {
         >
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute -inset-7 rounded-full bg-[radial-gradient(circle,rgba(244,202,89,0.32),transparent_62%)] blur-3xl opacity-72 animate-logo-glow"
+            className="pointer-events-none absolute -inset-5 rounded-full bg-[radial-gradient(circle,rgba(244,202,89,0.28),transparent_62%)] blur-3xl opacity-60 animate-logo-glow"
           />
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute -left-11 right-0 top-1/2 h-14 -translate-y-1/2 bg-gradient-to-r from-transparent via-gold-bright/76 to-transparent blur-xl opacity-78 animate-logo-sheen"
+            className="pointer-events-none absolute -left-8 right-0 top-1/2 h-11 -translate-y-1/2 bg-gradient-to-r from-transparent via-gold-bright/68 to-transparent blur-xl opacity-70 animate-logo-sheen"
           />
           <img
             src={logo}
             alt={SITE.name}
-            className="relative h-[3.8rem] md:h-[4.8rem] lg:h-[5.8rem] w-auto max-w-[11rem] md:max-w-[14rem] lg:max-w-[16.5rem] drop-shadow-[0_0_22px_rgba(212,175,55,0.32)] transition-transform duration-500 group-hover:scale-[1.05]"
+            className="relative h-[3.15rem] md:h-[3.8rem] lg:h-[4.35rem] w-auto max-w-[9.2rem] md:max-w-[11.8rem] lg:max-w-[13.8rem] drop-shadow-[0_0_18px_rgba(212,175,55,0.28)] transition-transform duration-500 group-hover:scale-[1.04]"
           />
         </Link>
 
