@@ -15,6 +15,7 @@ import logoLeo from "@/assets/partner-leo.png";
 import logoJunctions from "@/assets/partner-junctions-blast.png";
 import logoAcademy from "@/assets/partner-ceylon-models-academy.png";
 import logoMain from "@/assets/logo-ceylon-kandy.png";
+import founderPortrait from "@/assets/sameera-portrait.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
