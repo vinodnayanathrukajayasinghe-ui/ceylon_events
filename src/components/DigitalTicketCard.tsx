@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { CalendarDays, Download, Loader2, MapPin, ShieldCheck, Ticket } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import {
   type IssuedTicketRecord,
@@ -141,6 +142,9 @@ export function DigitalTicketCard({ ticket, compact = false, showActions = true 
                   setDownloading(true);
                   try {
                     await downloadTicketPdf(ticket);
+                  } catch (error) {
+                    console.error("Failed to download ticket PDF", error);
+                    toast.error("Ticket download failed. Please try again in a moment.");
                   } finally {
                     setDownloading(false);
                   }

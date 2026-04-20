@@ -1,6 +1,6 @@
 import QRCode from "qrcode";
 import { jsPDF } from "jspdf";
-import logo from "@/assets/logo-ceylon-kandy.png";
+import logoDataUrl from "@/assets/logo-ceylon-kandy.png?inline";
 import { SITE } from "@/lib/site";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -203,18 +203,6 @@ export async function adminForceIssuedTickets(orderId: string) {
   throw lastError;
 }
 
-async function assetToDataUrl(assetUrl: string) {
-  const response = await fetch(assetUrl);
-  const blob = await response.blob();
-
-  return new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-  });
-}
-
 function formatDate(dateValue?: string | null) {
   if (!dateValue) return "To be announced";
 
@@ -247,10 +235,11 @@ function slugifyTicketFilename(value: string) {
 }
 
 export async function downloadTicketPdf(ticket: IssuedTicketRecord) {
-  const [qrDataUrl, logoDataUrl] = await Promise.all([
-    createTicketQrDataUrl(ticket.qr_token),
-    assetToDataUrl(logo),
-  ]);
+  if (!ticket.qr_token) {
+    throw new Error("This ticket is missing its QR verification token.");
+  }
+
+  const qrDataUrl = await createTicketQrDataUrl(ticket.qr_token);
 
   const doc = new jsPDF({
     orientation: "landscape",
