@@ -6,7 +6,7 @@ import { SiteLayout } from "@/components/SiteLayout";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { DigitalTicketCard } from "@/components/DigitalTicketCard";
-import { type IssuedTicketRecord, issueTicketsForOrder } from "@/lib/tickets";
+import { type IssuedTicketRecord, formatTicketingError, issueTicketsForOrder } from "@/lib/tickets";
 
 interface BookingRecord {
   id: string;
@@ -54,6 +54,7 @@ function MyBookingsPage() {
   const [issuedTickets, setIssuedTickets] = useState<IssuedTicketRecord[]>([]);
   const [pageLoading, setPageLoading] = useState(true);
   const [repairingOrderIds, setRepairingOrderIds] = useState<string[]>([]);
+  const [ticketingError, setTicketingError] = useState<string | null>(null);
 
   const loadPage = useCallback(async () => {
     if (!user) return;
@@ -91,6 +92,9 @@ function MyBookingsPage() {
     const bookingRows = (bookingsResult.data || []) as BookingRecord[];
     const orderRows = (ordersResult.data || []) as OrderRecord[];
     let ticketRows = (initialTicketsResult.data || []) as IssuedTicketRecord[];
+    let nextTicketingError = initialTicketsResult.error
+      ? formatTicketingError(initialTicketsResult.error, "Unable to load issued tickets right now.")
+      : null;
 
     const issuedByOrder = new Set(ticketRows.map((ticket) => ticket.order_id));
     const missingPaidOrderIds = orderRows
@@ -104,11 +108,18 @@ function MyBookingsPage() {
 
       const refreshedTicketsResult = await loadIssuedTickets();
       ticketRows = (refreshedTicketsResult.data || []) as IssuedTicketRecord[];
+      if (refreshedTicketsResult.error) {
+        nextTicketingError = formatTicketingError(
+          refreshedTicketsResult.error,
+          "Unable to load issued tickets right now.",
+        );
+      }
     }
 
     setBookings(bookingRows);
     setOrders(orderRows);
     setIssuedTickets(ticketRows);
+    setTicketingError(nextTicketingError);
     setPageLoading(false);
   }, [user]);
 
@@ -140,7 +151,7 @@ function MyBookingsPage() {
       toast.success(result.message);
     } catch (error) {
       console.error("Failed to issue tickets", error);
-      toast.error(error instanceof Error ? error.message : "Ticket issuance failed. Please retry in a moment.");
+      toast.error(formatTicketingError(error));
     } finally {
       setRepairingOrderIds((current) => current.filter((id) => id !== orderId));
     }
@@ -183,6 +194,12 @@ function MyBookingsPage() {
             <Ticket className="text-gold" size={22} />
             <h2 className="font-display text-3xl text-ivory">Issued QR Tickets</h2>
           </div>
+
+          {ticketingError && (
+            <div className="mb-6 border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-200">
+              {ticketingError}
+            </div>
+          )}
 
           {issuedTickets.length === 0 ? (
             <div className="border border-gold-soft bg-charcoal p-10 text-center text-muted-foreground">

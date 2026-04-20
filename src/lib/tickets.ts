@@ -3,7 +3,6 @@ import { jsPDF } from "jspdf";
 import logoDataUrl from "@/assets/logo-ceylon-kandy.png?inline";
 import { SITE } from "@/lib/site";
 import { supabase } from "@/integrations/supabase/client";
-import { issueTicketsForOrderServer } from "@/server/tickets";
 
 export type TicketVerificationStatus =
   | "pending_payment"
@@ -97,6 +96,13 @@ export interface TicketIssuanceResult {
   message: string;
 }
 
+interface SupabaseLikeError {
+  code?: string;
+  message?: string;
+  details?: string | null;
+  hint?: string | null;
+}
+
 export const verificationStateCopy: Record<
   TicketVerificationStatus,
   { label: string; tone: string; panelTone: string }
@@ -142,6 +148,18 @@ export function buildTicketOwnerUrl(ticketCode: string) {
 
 export function buildTicketVerificationUrl(qrToken: string) {
   return `${getSiteOrigin()}/admin/verify?token=${encodeURIComponent(qrToken)}`;
+}
+
+function isSchemaCacheError(error: SupabaseLikeError | null | undefined) {
+  if (!error) return false;
+
+  return (
+    error.code === "PGRST202" ||
+    error.code === "PGRST205" ||
+    /schema cache/i.test(error.message || "") ||
+    /could not find the table/i.test(error.message || "") ||
+    /could not find the function/i.test(error.message || "")
+  );
 }
 
 export function extractTicketLookup(input: string) {
@@ -193,7 +211,7 @@ export async function ensureIssuedTicketsForOrder(orderId: string) {
   throw lastError;
 }
 
-function extractErrorMessage(error: unknown, fallback: string) {
+export function extractErrorMessage(error: unknown, fallback: string) {
   if (error instanceof Error && error.message) {
     return error.message;
   }
@@ -212,36 +230,22 @@ function extractErrorMessage(error: unknown, fallback: string) {
   return fallback;
 }
 
-async function getAuthHeaders() {
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+export function formatTicketingError(
+  error: unknown,
+  fallback = "Ticket issuance failed. Please retry in a moment.",
+) {
+  const maybeSupabaseError = (typeof error === "object" && error !== null
+    ? (error as SupabaseLikeError)
+    : null);
 
-  if (!session?.access_token) {
-    return undefined;
+  if (isSchemaCacheError(maybeSupabaseError)) {
+    return "Supabase ticketing tables/functions are missing in this project. Apply the ticketing migrations to create issued tickets, QR verification, and downloads.";
   }
 
-  return {
-    Authorization: `Bearer ${session.access_token}`,
-  };
+  return extractErrorMessage(error, fallback);
 }
 
 export async function issueTicketsForOrder(orderId: string): Promise<TicketIssuanceResult> {
-  const headers = await getAuthHeaders();
-  let serverError: unknown = null;
-
-  if (headers) {
-    try {
-      return await issueTicketsForOrderServer({
-        data: { orderId },
-        headers,
-      });
-    } catch (error) {
-      serverError = error;
-      console.error("Server ticket issuance failed, falling back to direct RPC", error);
-    }
-  }
-
   try {
     const createdCount = await ensureIssuedTicketsForOrder(orderId);
     const [{ count }, { data: order }] = await Promise.all([
@@ -267,12 +271,9 @@ export async function issueTicketsForOrder(orderId: string): Promise<TicketIssua
         createdCount > 0
           ? "Issued tickets generated successfully."
           : "Issued tickets are already available for this order.",
-    };
+      };
   } catch (error) {
-    const message = extractErrorMessage(
-      serverError || error,
-      "Ticket issuance failed. Please retry in a moment.",
-    );
+    const message = formatTicketingError(error);
 
     throw new Error(message);
   }

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { issueTicketsForOrder } from "@/lib/tickets";
+import { formatTicketingError, issueTicketsForOrder } from "@/lib/tickets";
 
 export const Route = createFileRoute("/admin/orders")({
   component: AdminOrders,
@@ -37,6 +37,7 @@ function AdminOrders() {
   const [issuedMap, setIssuedMap] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | PStatus>("all");
+  const [ticketingError, setTicketingError] = useState<string | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -54,6 +55,11 @@ function AdminOrders() {
         acc[row.order_id] = (acc[row.order_id] || 0) + 1;
         return acc;
       }, {}),
+    );
+    setTicketingError(
+      issued.error
+        ? formatTicketingError(issued.error, "Unable to load issued ticket records.")
+        : null,
     );
     setLoading(false);
   };
@@ -105,6 +111,11 @@ function AdminOrders() {
           Mark an order as <span className="text-gold">paid</span> to issue attendee-level QR
           tickets automatically. Pending or failed payments do not create valid admission.
         </p>
+        {ticketingError && (
+          <div className="mt-4 border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-200">
+            {ticketingError}
+          </div>
+        )}
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-4">
