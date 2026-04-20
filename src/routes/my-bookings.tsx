@@ -1,11 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { Calendar, LogOut, ReceiptText, Ticket } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Calendar, Loader2, LogOut, ReceiptText, RefreshCcw, Ticket } from "lucide-react";
+import { toast } from "sonner";
 import { SiteLayout } from "@/components/SiteLayout";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { DigitalTicketCard } from "@/components/DigitalTicketCard";
-import type { IssuedTicketRecord } from "@/lib/tickets";
+import { type IssuedTicketRecord, ensureIssuedTicketsForOrder } from "@/lib/tickets";
 
 interface BookingRecord {
   id: string;
@@ -36,7 +37,10 @@ export const Route = createFileRoute("/my-bookings")({
   head: () => ({
     meta: [
       { title: "My Bookings - Ceylon Kandy Events" },
-      { name: "description", content: "View your private event bookings, orders, and issued QR tickets." },
+      {
+        name: "description",
+        content: "View your private event bookings, paid ticket orders, and issued QR tickets.",
+      },
     ],
   }),
   component: MyBookingsPage,
@@ -49,27 +53,14 @@ function MyBookingsPage() {
   const [orders, setOrders] = useState<OrderRecord[]>([]);
   const [issuedTickets, setIssuedTickets] = useState<IssuedTicketRecord[]>([]);
   const [pageLoading, setPageLoading] = useState(true);
+  const [repairingOrderIds, setRepairingOrderIds] = useState<string[]>([]);
 
-  useEffect(() => {
-    if (!loading && !user) navigate({ to: "/login" });
-  }, [user, loading, navigate]);
-
-  useEffect(() => {
+  const loadPage = useCallback(async () => {
     if (!user) return;
 
     setPageLoading(true);
 
-    void Promise.all([
-      supabase
-        .from("bookings")
-        .select("*")
-        .or(`user_id.eq.${user.id},customer_email.eq.${user.email}`)
-        .order("created_at", { ascending: false }),
-      supabase
-        .from("ticket_orders")
-        .select("*, events(title, event_date, venue)")
-        .or(`user_id.eq.${user.id},customer_email.eq.${user.email}`)
-        .order("created_at", { ascending: false }),
+    const loadIssuedTickets = async () =>
       (supabase as any)
         .from("issued_tickets")
         .select(
@@ -81,14 +72,81 @@ function MyBookingsPage() {
             ticket_checkins(checked_in_at, source)
           `,
         )
+        .order("created_at", { ascending: false });
+
+    const [bookingsResult, ordersResult, initialTicketsResult] = await Promise.all([
+      supabase
+        .from("bookings")
+        .select("*")
+        .or(`user_id.eq.${user.id},customer_email.eq.${user.email}`)
         .order("created_at", { ascending: false }),
-    ]).then(([bookingsResult, ordersResult, ticketsResult]) => {
-      setBookings((bookingsResult.data || []) as BookingRecord[]);
-      setOrders((ordersResult.data || []) as OrderRecord[]);
-      setIssuedTickets((ticketsResult.data || []) as IssuedTicketRecord[]);
-      setPageLoading(false);
-    });
+      supabase
+        .from("ticket_orders")
+        .select("*, events(title, event_date, venue)")
+        .or(`user_id.eq.${user.id},customer_email.eq.${user.email}`)
+        .order("created_at", { ascending: false }),
+      loadIssuedTickets(),
+    ]);
+
+    const bookingRows = (bookingsResult.data || []) as BookingRecord[];
+    const orderRows = (ordersResult.data || []) as OrderRecord[];
+    let ticketRows = (initialTicketsResult.data || []) as IssuedTicketRecord[];
+
+    const issuedByOrder = new Set(ticketRows.map((ticket) => ticket.order_id));
+    const missingPaidOrderIds = orderRows
+      .filter((order) => order.payment_status === "paid" && !issuedByOrder.has(order.id))
+      .map((order) => order.id);
+
+    if (missingPaidOrderIds.length) {
+      await Promise.allSettled(
+        missingPaidOrderIds.map((orderId) => ensureIssuedTicketsForOrder(orderId)),
+      );
+
+      const refreshedTicketsResult = await loadIssuedTickets();
+      ticketRows = (refreshedTicketsResult.data || []) as IssuedTicketRecord[];
+    }
+
+    setBookings(bookingRows);
+    setOrders(orderRows);
+    setIssuedTickets(ticketRows);
+    setPageLoading(false);
   }, [user]);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate({ to: "/login" });
+    }
+  }, [user, loading, navigate]);
+
+  useEffect(() => {
+    void loadPage();
+  }, [loadPage]);
+
+  const issuedCountByOrder = useMemo(
+    () =>
+      issuedTickets.reduce<Record<string, number>>((accumulator, ticket) => {
+        accumulator[ticket.order_id] = (accumulator[ticket.order_id] || 0) + 1;
+        return accumulator;
+      }, {}),
+    [issuedTickets],
+  );
+
+  const repairOrder = async (orderId: string) => {
+    setRepairingOrderIds((current) => [...current, orderId]);
+
+    try {
+      const created = await ensureIssuedTicketsForOrder(orderId);
+      await loadPage();
+      toast.success(
+        created > 0 ? "Issued QR tickets generated successfully." : "Issued tickets are already up to date.",
+      );
+    } catch (error) {
+      console.error("Failed to issue tickets", error);
+      toast.error("Ticket issuance failed. Please retry in a moment.");
+    } finally {
+      setRepairingOrderIds((current) => current.filter((id) => id !== orderId));
+    }
+  };
 
   if (loading || !user || pageLoading) {
     return (
@@ -158,47 +216,74 @@ function MyBookingsPage() {
             </div>
           ) : (
             <div className="space-y-4">
-              {orders.map((order) => (
-                <div
-                  key={order.id}
-                  className="flex flex-wrap justify-between gap-4 border border-gold-soft bg-charcoal p-6"
-                >
-                  <div>
-                    <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-gold">
-                      {order.order_reference}
-                    </p>
-                    <h3 className="font-display text-2xl text-ivory">
-                      {order.events?.title ?? "Event Order"}
-                    </h3>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {order.quantity} ticket{order.quantity > 1 ? "s" : ""} · {order.currency}{" "}
-                      {Number(order.total_amount).toLocaleString()}
-                    </p>
-                    {order.events?.event_date && (
-                      <p className="mt-2 text-xs uppercase tracking-[0.26em] text-ivory/55">
-                        {new Date(order.events.event_date).toLocaleDateString("en-GB")} · {order.events?.venue}
-                      </p>
-                    )}
-                  </div>
+              {orders.map((order) => {
+                const issuedCount = issuedCountByOrder[order.id] || 0;
+                const missingIssuedTickets = order.payment_status === "paid" && issuedCount === 0;
+                const isRepairing = repairingOrderIds.includes(order.id);
 
-                  <div className="text-right">
-                    <span
-                      className={`inline-flex rounded-full border px-4 py-2 text-[10px] uppercase tracking-[0.3em] ${
-                        order.payment_status === "paid"
-                          ? "border-gold text-gold"
-                          : order.payment_status === "pending"
-                            ? "border-ivory/20 text-ivory/70"
-                            : "border-red-500/40 text-red-300"
-                      }`}
-                    >
-                      {order.payment_status}
-                    </span>
-                    <p className="mt-3 text-xs text-muted-foreground">
-                      Ordered {new Date(order.created_at).toLocaleString("en-GB")}
-                    </p>
+                return (
+                  <div
+                    key={order.id}
+                    className="flex flex-wrap justify-between gap-4 border border-gold-soft bg-charcoal p-6"
+                  >
+                    <div>
+                      <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-gold">
+                        {order.order_reference}
+                      </p>
+                      <h3 className="font-display text-2xl text-ivory">
+                        {order.events?.title ?? "Event Order"}
+                      </h3>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {order.quantity} ticket{order.quantity > 1 ? "s" : ""} · {order.currency}{" "}
+                        {Number(order.total_amount).toLocaleString()}
+                      </p>
+                      {order.events?.event_date && (
+                        <p className="mt-2 text-xs uppercase tracking-[0.26em] text-ivory/55">
+                          {new Date(order.events.event_date).toLocaleDateString("en-GB")} ·{" "}
+                          {order.events?.venue}
+                        </p>
+                      )}
+                      {order.payment_status === "paid" && (
+                        <p className="mt-3 text-xs uppercase tracking-[0.28em] text-gold/75">
+                          Issued tickets: {issuedCount} / {order.quantity}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="text-right">
+                      <span
+                        className={`inline-flex rounded-full border px-4 py-2 text-[10px] uppercase tracking-[0.3em] ${
+                          order.payment_status === "paid"
+                            ? "border-gold text-gold"
+                            : order.payment_status === "pending"
+                              ? "border-ivory/20 text-ivory/70"
+                              : "border-red-500/40 text-red-300"
+                        }`}
+                      >
+                        {order.payment_status}
+                      </span>
+                      <p className="mt-3 text-xs text-muted-foreground">
+                        Ordered {new Date(order.created_at).toLocaleString("en-GB")}
+                      </p>
+                      {missingIssuedTickets && (
+                        <button
+                          type="button"
+                          onClick={() => void repairOrder(order.id)}
+                          disabled={isRepairing}
+                          className="mt-4 inline-flex items-center gap-2 rounded-sm border border-gold px-4 py-2 text-[10px] uppercase tracking-[0.24em] text-gold transition-all hover:bg-gold hover:text-primary-foreground disabled:opacity-60"
+                        >
+                          {isRepairing ? (
+                            <Loader2 className="animate-spin" size={12} />
+                          ) : (
+                            <RefreshCcw size={12} />
+                          )}
+                          Generate Tickets
+                        </button>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

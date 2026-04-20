@@ -484,12 +484,12 @@ function HomePage() {
             ].map((p) => (
               <div
                 key={p.name}
-                className="aspect-square grid place-items-center p-8 border border-gold-soft bg-onyx hover:border-gold hover:bg-charcoal transition-all duration-500 group"
+                className="partner-card-luxe aspect-square grid place-items-center p-8 border border-gold-soft bg-onyx hover:border-gold hover:bg-charcoal hover:shadow-gold transition-all duration-500 group"
               >
                 <img
                   src={p.src}
                   alt={p.name}
-                  className="max-h-24 w-auto opacity-70 group-hover:opacity-100 transition-opacity"
+                  className="partner-logo-luxe max-h-24 w-auto opacity-80 group-hover:opacity-100"
                   loading="lazy"
                 />
               </div>

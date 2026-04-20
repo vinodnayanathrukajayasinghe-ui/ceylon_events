@@ -148,7 +148,7 @@ export function DigitalTicketCard({ ticket, compact = false, showActions = true 
                 className="inline-flex items-center gap-2 rounded-sm bg-gradient-gold px-5 py-3 text-xs uppercase tracking-[0.22em] text-primary-foreground transition-all hover:shadow-gold-lg"
               >
                 {downloading ? <Loader2 className="animate-spin" size={14} /> : <Download size={14} />}
-                Download PDF
+                Download Ticket
               </button>
             </div>
           )}

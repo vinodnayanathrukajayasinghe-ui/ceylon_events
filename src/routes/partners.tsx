@@ -41,8 +41,8 @@ function PartnersPage() {
         <div className="container-luxe grid md:grid-cols-2 gap-8">
           {PARTNERS.map((p) => (
             <div key={p.name} className="group relative border border-gold-soft bg-charcoal p-10 hover:border-gold hover:bg-onyx transition-all duration-500">
-              <div className="aspect-video grid place-items-center mb-8 bg-onyx border border-gold-soft p-6">
-                <img src={p.logo} alt={p.name} className="max-h-32 w-auto opacity-80 group-hover:opacity-100 transition-opacity" />
+              <div className="partner-card-luxe aspect-video grid place-items-center mb-8 bg-onyx border border-gold-soft p-6">
+                <img src={p.logo} alt={p.name} className="partner-logo-luxe max-h-32 w-auto opacity-85 group-hover:opacity-100" />
               </div>
               <p className="text-[10px] tracking-[0.3em] text-gold uppercase mb-2">{p.category}</p>
               <h3 className="font-display text-3xl text-ivory mb-3">{p.name}</h3>

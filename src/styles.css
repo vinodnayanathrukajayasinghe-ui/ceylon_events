@@ -345,6 +345,98 @@ select {
   padding: 1.6rem;
 }
 
+.partner-card-luxe {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 50% 32%, oklch(0.78 0.135 82 / 0.08), transparent 34%),
+    linear-gradient(180deg, oklch(0.08 0.005 60), oklch(0.06 0.004 60));
+}
+
+.partner-card-luxe::before {
+  content: "";
+  position: absolute;
+  inset: 14% 18%;
+  border-radius: 999px;
+  background: radial-gradient(circle, oklch(0.78 0.135 82 / 0.32) 0%, transparent 68%);
+  filter: blur(28px);
+  opacity: 0.42;
+  transform: scale(0.88);
+  transition:
+    opacity 500ms ease,
+    transform 500ms ease,
+    filter 500ms ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.partner-card-luxe::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, oklch(0.92 0.16 90 / 0.06), transparent 28%),
+    linear-gradient(180deg, transparent 55%, oklch(0.78 0.135 82 / 0.05));
+  pointer-events: none;
+  z-index: 0;
+}
+
+.partner-card-luxe:hover::before {
+  opacity: 0.78;
+  transform: scale(1.06);
+  filter: blur(34px);
+}
+
+.partner-card-luxe > * {
+  position: relative;
+  z-index: 1;
+}
+
+.partner-logo-luxe {
+  filter:
+    drop-shadow(0 0 10px oklch(0.78 0.135 82 / 0.14))
+    drop-shadow(0 0 22px oklch(0.78 0.135 82 / 0.1));
+  transition:
+    opacity 400ms ease,
+    transform 500ms ease,
+    filter 500ms ease;
+}
+
+.partner-card-luxe:hover .partner-logo-luxe {
+  transform: scale(1.04);
+  filter:
+    drop-shadow(0 0 14px oklch(0.78 0.135 82 / 0.26))
+    drop-shadow(0 0 34px oklch(0.78 0.135 82 / 0.2));
+}
+
+.footer-logo-shell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-logo-shell::before {
+  content: "";
+  position: absolute;
+  inset: 6% -10%;
+  border-radius: 999px;
+  background: radial-gradient(circle, oklch(0.78 0.135 82 / 0.38) 0%, transparent 68%);
+  filter: blur(22px);
+  opacity: 0.78;
+  animation: logo-glow 4.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.footer-logo-luxe {
+  position: relative;
+  z-index: 1;
+  filter:
+    drop-shadow(0 0 12px oklch(0.78 0.135 82 / 0.18))
+    drop-shadow(0 0 28px oklch(0.78 0.135 82 / 0.14));
+}
+
 @media (min-width: 768px) {
   .service-panel__body {
     padding: 1.9rem;

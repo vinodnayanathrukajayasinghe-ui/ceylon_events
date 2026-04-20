@@ -10,8 +10,8 @@ export function SiteFooter() {
 
       <div className="container-luxe py-20 grid gap-12 md:grid-cols-2 lg:grid-cols-4">
         <div>
-          <Link to="/" className="flex items-center gap-3 mb-5">
-            <img src={logo} alt={SITE.name} className="h-14 w-auto" />
+          <Link to="/" className="footer-logo-shell mb-8">
+            <img src={logo} alt={SITE.name} className="footer-logo-luxe h-32 md:h-36 w-auto" />
           </Link>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
             Crafting Dubai's most exceptional luxury events. From private celebrations to international galas, we deliver moments worthy of memory.

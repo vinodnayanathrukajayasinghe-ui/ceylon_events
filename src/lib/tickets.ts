@@ -1,7 +1,8 @@
 import QRCode from "qrcode";
 import { jsPDF } from "jspdf";
-import logo from "@/assets/logo-header.png";
+import logo from "@/assets/logo-ceylon-kandy.png";
 import { SITE } from "@/lib/site";
+import { supabase } from "@/integrations/supabase/client";
 
 export type TicketVerificationStatus =
   | "pending_payment"
@@ -154,14 +155,38 @@ export function extractTicketLookup(input: string) {
 
 export async function createTicketQrDataUrl(qrToken: string) {
   return QRCode.toDataURL(buildTicketVerificationUrl(qrToken), {
-    errorCorrectionLevel: "M",
-    margin: 1,
+    errorCorrectionLevel: "H",
+    margin: 2,
     color: {
-      dark: "#d9b45a",
-      light: "#0a0908",
+      dark: "#17120b",
+      light: "#fff8eb",
     },
-    width: 320,
+    width: 480,
   });
+}
+
+export async function ensureIssuedTicketsForOrder(orderId: string) {
+  const { data, error } = await (supabase as any).rpc("ensure_my_paid_ticket_issuance", {
+    _order_id: orderId,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return Number(data || 0);
+}
+
+export async function adminForceIssuedTickets(orderId: string) {
+  const { data, error } = await (supabase as any).rpc("admin_force_ticket_issuance", {
+    _order_id: orderId,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return Number(data || 0);
 }
 
 async function assetToDataUrl(assetUrl: string) {
@@ -199,6 +224,14 @@ function formatDateTime(dateValue?: string | null) {
   });
 }
 
+function slugifyTicketFilename(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 70);
+}
+
 export async function downloadTicketPdf(ticket: IssuedTicketRecord) {
   const [qrDataUrl, logoDataUrl] = await Promise.all([
     createTicketQrDataUrl(ticket.qr_token),
@@ -220,8 +253,10 @@ export async function downloadTicketPdf(ticket: IssuedTicketRecord) {
 
   doc.setFillColor(217, 180, 90);
   doc.roundedRect(490, 20, 210, 300, 16, 16, "F");
+  doc.setFillColor(20, 16, 12);
+  doc.roundedRect(508, 72, 174, 160, 18, 18, "F");
 
-  doc.addImage(logoDataUrl, "PNG", 38, 34, 120, 48);
+  doc.addImage(logoDataUrl, "PNG", 36, 30, 156, 86);
 
   doc.setTextColor(217, 180, 90);
   doc.setFont("times", "italic");
@@ -241,24 +276,38 @@ export async function downloadTicketPdf(ticket: IssuedTicketRecord) {
   doc.text("Venue", 220, 226);
   doc.text("Ticket Tier", 40, 274);
   doc.text("Order Ref", 220, 274);
+  doc.text("Payment", 40, 310);
+  doc.text("Issued", 220, 310);
+  doc.text("Total Paid", 360, 310);
 
   doc.setTextColor(245, 240, 232);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(18);
   doc.text(ticket.attendee_name, 40, 198);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(11);
+  doc.text(ticket.attendee_email || ticket.purchaser_email, 40, 214, { maxWidth: 170 });
 
+  doc.setFont("helvetica", "bold");
   doc.setFontSize(14);
   doc.text(formatDate(ticket.events?.event_date), 40, 246, { maxWidth: 160 });
   doc.text(ticket.events?.venue || "Venue to be announced", 220, 246, { maxWidth: 230 });
   doc.text(ticket.ticket_categories?.name || "Ticket", 40, 294);
   doc.text(ticket.ticket_orders?.order_reference || ticket.order_id, 220, 294, { maxWidth: 230 });
+  doc.text(ticket.payment_status.toUpperCase(), 40, 330);
+  doc.text(formatDateTime(ticket.issued_at || ticket.created_at || undefined), 220, 330, {
+    maxWidth: 230,
+  });
+  doc.text(`${ticket.currency} ${Number(ticket.total_amount).toLocaleString()}`, 360, 330, {
+    maxWidth: 120,
+  });
 
   doc.setTextColor(10, 9, 8);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(22);
   doc.text("SCAN TO VERIFY", 515, 54);
 
-  doc.addImage(qrDataUrl, "PNG", 525, 78, 140, 140);
+  doc.addImage(qrDataUrl, "PNG", 525, 86, 140, 140);
 
   doc.setFontSize(11);
   doc.setFont("helvetica", "normal");
@@ -270,6 +319,9 @@ export async function downloadTicketPdf(ticket: IssuedTicketRecord) {
     515,
     300,
   );
+  doc.text(`Purchaser: ${ticket.purchaser_name}`, 40, 46);
+  doc.text(`Phone: ${ticket.purchaser_phone}`, 220, 46);
 
-  doc.save(`${ticket.ticket_code}.pdf`);
+  const eventSlug = slugifyTicketFilename(ticket.events?.slug || ticket.events?.title || "ceylon-kandy-event");
+  doc.save(`${eventSlug}-ticket-${ticket.ticket_code}.pdf`);
 }
