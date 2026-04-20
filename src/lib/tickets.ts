@@ -166,27 +166,41 @@ export async function createTicketQrDataUrl(qrToken: string) {
 }
 
 export async function ensureIssuedTicketsForOrder(orderId: string) {
-  const { data, error } = await (supabase as any).rpc("ensure_my_paid_ticket_issuance", {
-    _order_id: orderId,
-  });
+  const attempts = [
+    { fn: "ensure_my_paid_ticket_issuance", args: { _order_id: orderId } },
+    { fn: "sync_order_payment_to_tickets", args: { _order_id: orderId } },
+  ];
 
-  if (error) {
-    throw error;
+  let lastError: unknown = null;
+
+  for (const attempt of attempts) {
+    const { data, error } = await (supabase as any).rpc(attempt.fn, attempt.args);
+    if (!error) {
+      return Number(data || 0);
+    }
+    lastError = error;
   }
 
-  return Number(data || 0);
+  throw lastError;
 }
 
 export async function adminForceIssuedTickets(orderId: string) {
-  const { data, error } = await (supabase as any).rpc("admin_force_ticket_issuance", {
-    _order_id: orderId,
-  });
+  const attempts = [
+    { fn: "admin_force_ticket_issuance", args: { _order_id: orderId } },
+    { fn: "sync_order_payment_to_tickets", args: { _order_id: orderId } },
+  ];
 
-  if (error) {
-    throw error;
+  let lastError: unknown = null;
+
+  for (const attempt of attempts) {
+    const { data, error } = await (supabase as any).rpc(attempt.fn, attempt.args);
+    if (!error) {
+      return Number(data || 0);
+    }
+    lastError = error;
   }
 
-  return Number(data || 0);
+  throw lastError;
 }
 
 async function assetToDataUrl(assetUrl: string) {

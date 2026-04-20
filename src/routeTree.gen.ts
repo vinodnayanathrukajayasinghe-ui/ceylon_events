@@ -32,6 +32,7 @@ import { Route as AdminTicketsRouteImport } from './routes/admin.tickets'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminInquiriesRouteImport } from './routes/admin.inquiries'
 import { Route as AdminEventsRouteImport } from './routes/admin.events'
+import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
 import { Route as AdminCheckinsRouteImport } from './routes/admin.checkins'
 import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
 
@@ -150,6 +151,11 @@ const AdminEventsRoute = AdminEventsRouteImport.update({
   path: '/events',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCustomersRoute = AdminCustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCheckinsRoute = AdminCheckinsRouteImport.update({
   id: '/checkins',
   path: '/checkins',
@@ -178,6 +184,7 @@ export interface FileRoutesByFullPath {
   '/tickets': typeof TicketsRouteWithChildren
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/checkins': typeof AdminCheckinsRoute
+  '/admin/customers': typeof AdminCustomersRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -204,6 +211,7 @@ export interface FileRoutesByTo {
   '/tickets': typeof TicketsRouteWithChildren
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/checkins': typeof AdminCheckinsRoute
+  '/admin/customers': typeof AdminCustomersRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -232,6 +240,7 @@ export interface FileRoutesById {
   '/tickets': typeof TicketsRouteWithChildren
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/checkins': typeof AdminCheckinsRoute
+  '/admin/customers': typeof AdminCustomersRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/orders': typeof AdminOrdersRoute
@@ -261,6 +270,7 @@ export interface FileRouteTypes {
     | '/tickets'
     | '/admin/bookings'
     | '/admin/checkins'
+    | '/admin/customers'
     | '/admin/events'
     | '/admin/inquiries'
     | '/admin/orders'
@@ -287,6 +297,7 @@ export interface FileRouteTypes {
     | '/tickets'
     | '/admin/bookings'
     | '/admin/checkins'
+    | '/admin/customers'
     | '/admin/events'
     | '/admin/inquiries'
     | '/admin/orders'
@@ -314,6 +325,7 @@ export interface FileRouteTypes {
     | '/tickets'
     | '/admin/bookings'
     | '/admin/checkins'
+    | '/admin/customers'
     | '/admin/events'
     | '/admin/inquiries'
     | '/admin/orders'
@@ -506,6 +518,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminEventsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/customers': {
+      id: '/admin/customers'
+      path: '/customers'
+      fullPath: '/admin/customers'
+      preLoaderRoute: typeof AdminCustomersRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/checkins': {
       id: '/admin/checkins'
       path: '/checkins'
@@ -526,6 +545,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminBookingsRoute: typeof AdminBookingsRoute
   AdminCheckinsRoute: typeof AdminCheckinsRoute
+  AdminCustomersRoute: typeof AdminCustomersRoute
   AdminEventsRoute: typeof AdminEventsRoute
   AdminInquiriesRoute: typeof AdminInquiriesRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
@@ -537,6 +557,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminBookingsRoute: AdminBookingsRoute,
   AdminCheckinsRoute: AdminCheckinsRoute,
+  AdminCustomersRoute: AdminCustomersRoute,
   AdminEventsRoute: AdminEventsRoute,
   AdminInquiriesRoute: AdminInquiriesRoute,
   AdminOrdersRoute: AdminOrdersRoute,

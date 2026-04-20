@@ -9,6 +9,7 @@ import {
   ArrowLeft,
   ShieldCheck,
   ScanLine,
+  Users,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 
@@ -27,6 +28,7 @@ const ADMIN_NAV: NavItem[] = [
   { to: "/admin/checkins", label: "Check-In Logs", icon: Inbox },
   { to: "/admin/bookings", label: "Bookings", icon: Inbox },
   { to: "/admin/inquiries", label: "Inquiries", icon: Mail },
+  { to: "/admin/customers", label: "Customers", icon: Users },
 ];
 
 function AdminLayout() {

@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { CalendarDays, Ticket, Inbox, Mail, TrendingUp } from "lucide-react";
+import { CalendarDays, Ticket, Inbox, Mail, TrendingUp, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/admin/")({
@@ -12,6 +12,7 @@ interface Stats {
   orders: number;
   bookings: number;
   inquiries: number;
+  customers: number;
   revenue: number;
   newBookings: number;
 }
@@ -23,11 +24,12 @@ function AdminDashboard() {
 
   useEffect(() => {
     (async () => {
-      const [ev, ord, bk, inq, paidOrd, newBk, recBk, recOrd] = await Promise.all([
+      const [ev, ord, bk, inq, customers, paidOrd, newBk, recBk, recOrd] = await Promise.all([
         supabase.from("events").select("id", { count: "exact", head: true }),
         supabase.from("ticket_orders").select("id", { count: "exact", head: true }),
         supabase.from("bookings").select("id", { count: "exact", head: true }),
         supabase.from("inquiries").select("id", { count: "exact", head: true }),
+        supabase.from("user_roles").select("id", { count: "exact", head: true }).eq("role", "customer"),
         supabase.from("ticket_orders").select("total_amount").eq("payment_status", "paid"),
         supabase.from("bookings").select("id", { count: "exact", head: true }).eq("status", "new"),
         supabase.from("bookings").select("*").order("created_at", { ascending: false }).limit(5),
@@ -38,6 +40,7 @@ function AdminDashboard() {
         orders: ord.count || 0,
         bookings: bk.count || 0,
         inquiries: inq.count || 0,
+        customers: customers.count || 0,
         revenue: (paidOrd.data || []).reduce((s, r: any) => s + Number(r.total_amount || 0), 0),
         newBookings: newBk.count || 0,
       });
@@ -51,6 +54,7 @@ function AdminDashboard() {
     { label: "Ticket Orders", value: stats?.orders ?? "—", to: "/admin/orders", icon: Ticket },
     { label: "Bookings", value: stats?.bookings ?? "—", to: "/admin/bookings", icon: Inbox, badge: stats?.newBookings },
     { label: "Inquiries", value: stats?.inquiries ?? "—", to: "/admin/inquiries", icon: Mail },
+    { label: "Customers", value: stats?.customers ?? "—", to: "/admin/customers", icon: Users },
   ];
 
   return (
