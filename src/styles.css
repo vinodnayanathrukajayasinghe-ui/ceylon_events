@@ -346,6 +346,48 @@ select {
   background: linear-gradient(to right, transparent, oklch(0.78 0.135 82 / 0.85), transparent);
 }
 
+.price-display {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.28rem;
+  font-family: var(--font-display);
+  font-variant-numeric: lining-nums tabular-nums;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  text-shadow:
+    0 0 18px oklch(0.78 0.135 82 / 0.12),
+    0 0 36px oklch(0.78 0.135 82 / 0.06);
+}
+
+.price-display--hero {
+  font-size: clamp(2rem, 3vw, 3.1rem);
+}
+
+.price-display--card {
+  font-size: clamp(1.8rem, 2vw, 2.45rem);
+}
+
+.price-display--compact {
+  font-size: clamp(1.45rem, 1.6vw, 2rem);
+}
+
+.price-currency {
+  font-family: var(--font-body);
+  font-size: 0.42em;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: oklch(0.88 0.155 88 / 0.94);
+}
+
+.price-value {
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .service-panel {
   position: relative;
   overflow: hidden;

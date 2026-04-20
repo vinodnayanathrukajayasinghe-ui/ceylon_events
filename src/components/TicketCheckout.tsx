@@ -30,6 +30,10 @@ interface Props {
 
 const MAX_QTY = 12;
 
+function formatPrice(value: number) {
+  return Number(value || 0).toLocaleString("en-US");
+}
+
 function createOrderReference() {
   const random =
     typeof crypto !== "undefined" && "randomUUID" in crypto
@@ -328,8 +332,9 @@ export function TicketCheckout({ eventId, eventTitle, currency, fallbackCategori
               >
                 <div className="flex items-baseline justify-between gap-3">
                   <p className="font-display text-lg text-ivory">{category.name}</p>
-                  <p className="font-display text-xl text-gradient-gold">
-                    {currency} {category.price}
+                  <p className="price-display price-display--compact">
+                    <span className="price-currency">{currency}</span>
+                    <span className="price-value">{formatPrice(category.price)}</span>
                   </p>
                 </div>
                 {category.description && (
@@ -497,8 +502,9 @@ export function TicketCheckout({ eventId, eventTitle, currency, fallbackCategori
             QR tickets are issued only after payment status becomes paid.
           </p>
         </div>
-        <p className="font-display text-3xl text-gradient-gold">
-          {currency} {total.toLocaleString()}
+        <p className="price-display price-display--card">
+          <span className="price-currency">{currency}</span>
+          <span className="price-value">{formatPrice(total)}</span>
         </p>
       </div>
 

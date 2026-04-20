@@ -36,6 +36,10 @@ interface TicketEventRow {
   status: string;
 }
 
+function formatPrice(value: number | null | undefined) {
+  return Number(value || 0).toLocaleString("en-US");
+}
+
 function TicketsPage() {
   const location = useLocation();
   const [events, setEvents] = useState<TicketEventRow[]>(FALLBACK);
@@ -113,8 +117,9 @@ function TicketsPage() {
                 <div className="flex flex-wrap items-center justify-between gap-4 border-t border-gold-soft pt-4">
                   <div>
                     <p className="text-[10px] uppercase tracking-[0.3em] text-gold">From</p>
-                    <p className="font-display text-3xl text-gradient-gold">
-                      {event.currency || "AED"} {event.base_price}
+                    <p className="price-display price-display--card">
+                      <span className="price-currency">{event.currency || "AED"}</span>
+                      <span className="price-value">{formatPrice(event.base_price)}</span>
                     </p>
                   </div>
                   {event.status === "sold_out" ? (

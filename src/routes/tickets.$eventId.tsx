@@ -28,6 +28,10 @@ interface TicketEventDetail {
   category: string | null;
 }
 
+function formatPrice(value: number | null | undefined) {
+  return Number(value || 0).toLocaleString("en-US");
+}
+
 export const Route = createFileRoute("/tickets/$eventId")({
   head: ({ params }) => ({
     meta: [
@@ -128,10 +132,13 @@ function TicketEventPage() {
                 </div>
                 <div className="border border-gold-soft bg-onyx/55 p-5 backdrop-blur-md">
                   <p className="mb-2 text-[10px] uppercase tracking-[0.3em] text-gold">From</p>
-                  <p className="flex items-center gap-2 text-sm text-ivory">
-                    <TicketIcon size={14} className="text-gold" />
-                    {event.currency} {event.base_price || 0}
-                  </p>
+                  <div className="flex items-end gap-3">
+                    <TicketIcon size={14} className="mb-2 text-gold" />
+                    <p className="price-display price-display--compact">
+                      <span className="price-currency">{event.currency || "AED"}</span>
+                      <span className="price-value">{formatPrice(event.base_price)}</span>
+                    </p>
+                  </div>
                 </div>
               </div>
 
