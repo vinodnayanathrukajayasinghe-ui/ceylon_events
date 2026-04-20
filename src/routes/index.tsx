@@ -179,7 +179,7 @@ function HomePage() {
               <br />
               People Keep <span className="text-gradient-gold italic">Talking About</span>
             </h1>
-            <p className="section-copy mt-8 max-w-xl text-lg text-ivory/75">
+            <p className="section-copy mt-8 hidden max-w-xl text-lg text-ivory/75 md:block">
               Bringing the energy and excitement that keeps people talking. Stunning modeling
               events, sensational live shows, and high-voltage entertainment designed for premium
               crowds and unforgettable nights.
