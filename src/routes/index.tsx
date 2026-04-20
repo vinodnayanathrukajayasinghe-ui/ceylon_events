@@ -6,7 +6,7 @@ import { SectionHeading } from "@/components/SectionHeading";
 import { Counter } from "@/components/Counter";
 import { SITE, whatsappLink } from "@/lib/site";
 import heroImg from "@/assets/hero-band-stage-poster.jpg";
-import heroVideo from "@/assets/hero-band-stage.mp4";
+import heroVideo from "@/assets/hero-concert-stage.mp4";
 import g1 from "@/assets/gallery-1.jpg";
 import g2 from "@/assets/gallery-2.jpg";
 import g3 from "@/assets/gallery-3.jpg";
@@ -146,7 +146,7 @@ function HomePage() {
           />
           <video
             ref={videoRef}
-            className={`absolute inset-0 size-full object-cover scale-[1.06] transition-opacity duration-700 ${
+            className={`absolute inset-0 size-full object-cover object-[center_42%] scale-[1.16] transition-opacity duration-700 ${
               videoReady ? "opacity-[0.82]" : "opacity-0"
             }`}
             autoPlay
@@ -154,7 +154,7 @@ function HomePage() {
             defaultMuted
             loop
             playsInline
-            preload="auto"
+            preload="metadata"
             poster={heroImg}
             onLoadedData={() => setVideoReady(true)}
             disablePictureInPicture
@@ -165,6 +165,8 @@ function HomePage() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_34%,rgba(68,64,214,0.34),transparent_34%),radial-gradient(circle_at_78%_18%,rgba(136,64,255,0.18),transparent_28%),radial-gradient(circle_at_70%_78%,rgba(24,78,193,0.22),transparent_30%)]" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#050816]/55 via-[#120d2d]/18 to-onyx/88" />
           <div className="absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-[#5b4bff]/18 to-transparent opacity-85" />
+          <div className="absolute inset-y-0 right-0 w-[22%] bg-gradient-to-l from-[#050816] via-[#050816]/62 to-transparent opacity-92" />
+          <div className="absolute bottom-0 right-0 h-[20%] w-[28%] bg-[radial-gradient(circle_at_100%_100%,rgba(5,8,22,0.96),rgba(5,8,22,0.72)_36%,transparent_76%)]" />
         </div>
 
         <div className="container-luxe relative z-10 py-20">
