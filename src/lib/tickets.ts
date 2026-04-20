@@ -3,6 +3,7 @@ import { jsPDF } from "jspdf";
 import logoDataUrl from "@/assets/logo-ceylon-kandy.png?inline";
 import { SITE } from "@/lib/site";
 import { supabase } from "@/integrations/supabase/client";
+import { issueTicketsForOrderServer } from "@/server/tickets";
 
 export type TicketVerificationStatus =
   | "pending_payment"
@@ -86,6 +87,14 @@ export interface IssuedTicketRecord {
     order_reference?: string;
     created_at?: string;
   } | null;
+}
+
+export interface TicketIssuanceResult {
+  createdCount: number;
+  issuedCount: number;
+  quantity: number;
+  orderReference?: string;
+  message: string;
 }
 
 export const verificationStateCopy: Record<
@@ -182,6 +191,91 @@ export async function ensureIssuedTicketsForOrder(orderId: string) {
   }
 
   throw lastError;
+}
+
+function extractErrorMessage(error: unknown, fallback: string) {
+  if (error instanceof Error && error.message) {
+    return error.message;
+  }
+
+  if (typeof error === "string" && error) {
+    return error;
+  }
+
+  if (typeof error === "object" && error !== null) {
+    const maybeMessage = (error as { message?: string }).message;
+    if (maybeMessage) {
+      return maybeMessage;
+    }
+  }
+
+  return fallback;
+}
+
+async function getAuthHeaders() {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session?.access_token) {
+    return undefined;
+  }
+
+  return {
+    Authorization: `Bearer ${session.access_token}`,
+  };
+}
+
+export async function issueTicketsForOrder(orderId: string): Promise<TicketIssuanceResult> {
+  const headers = await getAuthHeaders();
+  let serverError: unknown = null;
+
+  if (headers) {
+    try {
+      return await issueTicketsForOrderServer({
+        data: { orderId },
+        headers,
+      });
+    } catch (error) {
+      serverError = error;
+      console.error("Server ticket issuance failed, falling back to direct RPC", error);
+    }
+  }
+
+  try {
+    const createdCount = await ensureIssuedTicketsForOrder(orderId);
+    const [{ count }, { data: order }] = await Promise.all([
+      (supabase as any).from("issued_tickets").select("id", { count: "exact", head: true }).eq("order_id", orderId),
+      supabase.from("ticket_orders").select("quantity, order_reference").eq("id", orderId).maybeSingle(),
+    ]);
+
+    const issuedCount = Number(count || 0);
+    const quantity = Number(order?.quantity || issuedCount || 0);
+
+    if (quantity && issuedCount < quantity) {
+      throw new Error(
+        `Only ${issuedCount} of ${quantity} tickets are currently issued for ${order?.order_reference || "this order"}.`,
+      );
+    }
+
+    return {
+      createdCount,
+      issuedCount,
+      quantity,
+      orderReference: order?.order_reference,
+      message:
+        createdCount > 0
+          ? "Issued tickets generated successfully."
+          : "Issued tickets are already available for this order.",
+    };
+  } catch (error) {
+    const message = extractErrorMessage(
+      serverError || error,
+      "Ticket issuance failed. Please retry in a moment.",
+    );
+
+    throw new Error(message);
+  }
 }
 
 export async function adminForceIssuedTickets(orderId: string) {

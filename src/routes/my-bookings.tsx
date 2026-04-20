@@ -6,7 +6,7 @@ import { SiteLayout } from "@/components/SiteLayout";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { DigitalTicketCard } from "@/components/DigitalTicketCard";
-import { type IssuedTicketRecord, ensureIssuedTicketsForOrder } from "@/lib/tickets";
+import { type IssuedTicketRecord, issueTicketsForOrder } from "@/lib/tickets";
 
 interface BookingRecord {
   id: string;
@@ -99,7 +99,7 @@ function MyBookingsPage() {
 
     if (missingPaidOrderIds.length) {
       await Promise.allSettled(
-        missingPaidOrderIds.map((orderId) => ensureIssuedTicketsForOrder(orderId)),
+        missingPaidOrderIds.map((orderId) => issueTicketsForOrder(orderId)),
       );
 
       const refreshedTicketsResult = await loadIssuedTickets();
@@ -135,14 +135,12 @@ function MyBookingsPage() {
     setRepairingOrderIds((current) => [...current, orderId]);
 
     try {
-      const created = await ensureIssuedTicketsForOrder(orderId);
+      const result = await issueTicketsForOrder(orderId);
       await loadPage();
-      toast.success(
-        created > 0 ? "Issued QR tickets generated successfully." : "Issued tickets are already up to date.",
-      );
+      toast.success(result.message);
     } catch (error) {
       console.error("Failed to issue tickets", error);
-      toast.error("Ticket issuance failed. Please retry in a moment.");
+      toast.error(error instanceof Error ? error.message : "Ticket issuance failed. Please retry in a moment.");
     } finally {
       setRepairingOrderIds((current) => current.filter((id) => id !== orderId));
     }

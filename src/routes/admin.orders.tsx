@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { adminForceIssuedTickets } from "@/lib/tickets";
+import { issueTicketsForOrder } from "@/lib/tickets";
 
 export const Route = createFileRoute("/admin/orders")({
   component: AdminOrders,
@@ -74,10 +74,14 @@ function AdminOrders() {
 
     if (status === "paid") {
       try {
-        await adminForceIssuedTickets(id);
+        await issueTicketsForOrder(id);
       } catch (issuanceError) {
         console.error("Ticket issuance sync failed", issuanceError);
-        toast.error("Payment saved, but ticket issuance needs a retry.");
+        toast.error(
+          issuanceError instanceof Error
+            ? issuanceError.message
+            : "Payment saved, but ticket issuance needs a retry.",
+        );
         void load();
         return;
       }
