@@ -12,7 +12,7 @@ export const SITE = {
   phoneRaw: "+971504073638",
   whatsapp: "971504073638",
   email: "info@ceylonkandyevents.com",
-  founder: "Sameera Sinhapali",
+  founder: "Sameera Singhapali",
   url: "https://ceylonkandyevents.com",
   canonicalUrl: "https://ceylonkandyevents.com",
   ogImage: "/og-image.jpg",

@@ -17,7 +17,9 @@ import logoLeo from "@/assets/partner-leo.png";
 import logoJunctions from "@/assets/partner-junctions-blast.png";
 import logoAcademy from "@/assets/partner-ceylon-models-academy.png";
 import logoMain from "@/assets/logo-ceylon-kandy.png";
-import founderPortrait from "@/assets/sameera-portrait.png";
+import founderPortrait from "@/assets/team/sameera-singhapali-founder-ceo.jpeg";
+import directorHimali from "@/assets/team/himali-priyadarshani-director.jpeg";
+import directorKrishan from "@/assets/team/krishan-singahapali-director-operations.jpeg";
 import serviceModeling from "@/assets/services/modeling-events-luxe.jpg";
 import servicePrivate from "@/assets/services/private-parties-luxe.jpg";
 import serviceLiveShows from "@/assets/services/live-shows-luxe.jpg";
@@ -94,6 +96,27 @@ const FEATURED = [
     venue: "SLS Dubai",
     price: "Sold Out",
     slug: "new-year-rooftop-2026",
+  },
+];
+
+const MANAGEMENT = [
+  {
+    name: "Sameera Singhapali",
+    role: "Founder & CEO",
+    img: founderPortrait,
+    position: "object-[center_18%]",
+  },
+  {
+    name: "Himali Priyadarshani",
+    role: "Director",
+    img: directorHimali,
+    position: "object-[center_18%]",
+  },
+  {
+    name: "Krishan Singahapali",
+    role: "Director of Operations",
+    img: directorKrishan,
+    position: "object-[center_15%]",
   },
 ];
 
@@ -318,12 +341,7 @@ function HomePage() {
                 className="service-panel group rounded-[1.5rem] border border-gold-soft shadow-gold transition-all duration-500 hover:-translate-y-1 hover:border-gold hover:shadow-gold-lg"
               >
                 <div className="service-panel__media">
-                  <img
-                    src={s.img}
-                    alt={s.title}
-                    loading="lazy"
-                    className="service-panel__image"
-                  />
+                  <img src={s.img} alt={s.title} loading="lazy" className="service-panel__image" />
                 </div>
                 <div className="service-panel__body">
                   <Sparkles
@@ -333,9 +351,7 @@ function HomePage() {
                   <h3 className="font-display text-[1.9rem] leading-[0.98] text-ivory transition-colors duration-500 group-hover:text-gold">
                     {s.title}
                   </h3>
-                  <p className="section-copy mt-4 text-sm text-muted-foreground">
-                    {s.desc}
-                  </p>
+                  <p className="section-copy mt-4 text-sm text-muted-foreground">{s.desc}</p>
                 </div>
               </article>
             ))}
@@ -435,39 +451,52 @@ function HomePage() {
         </div>
       </section>
 
-      {/* FOUNDER HIGHLIGHT */}
-      <section className="py-32">
-        <div className="container-luxe grid lg:grid-cols-2 gap-16 items-center">
-          <div className="relative aspect-[4/5] max-w-md mx-auto w-full">
-            <div className="absolute inset-0 -m-3 border border-gold opacity-60" />
-            <div className="relative size-full overflow-hidden">
-              <img
-                src={founderPortrait}
-                alt="Sameera Sinhapali, Founder of Ceylon Kandy Events"
-                className="size-full object-cover object-top"
-              />
-              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-onyx via-onyx/40 to-transparent" />
-            </div>
+      {/* MANAGEMENT */}
+      <section id="management" className="py-32">
+        <div className="container-luxe">
+          <SectionHeading
+            eyebrow="Management"
+            title="Leadership Team"
+            subtitle="The directors behind Ceylon Kandy Events' premium guest experience, production discipline, and polished event delivery."
+          />
+          <div className="mt-16 grid gap-8 md:grid-cols-3">
+            {MANAGEMENT.map((member) => (
+              <article
+                key={member.name}
+                className="group overflow-hidden rounded-sm border border-gold-soft bg-onyx shadow-gold transition-all duration-500 hover:-translate-y-1 hover:border-gold hover:shadow-gold-lg"
+              >
+                <div className="relative aspect-[4/5] overflow-hidden bg-charcoal">
+                  <img
+                    src={member.img}
+                    alt=""
+                    aria-hidden="true"
+                    className={`absolute inset-0 size-full scale-110 object-cover ${member.position} blur-xl saturate-75 opacity-35`}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-onyx/20 via-onyx/10 to-onyx/70" />
+                  <img
+                    src={member.img}
+                    alt={`${member.name}, ${member.role}`}
+                    loading="lazy"
+                    className={`relative size-full object-cover ${member.position} transition-transform duration-700 group-hover:scale-[1.035]`}
+                  />
+                  <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-onyx via-onyx/45 to-transparent" />
+                </div>
+                <div className="p-7 text-center">
+                  <h3 className="font-display text-3xl text-ivory">{member.name}</h3>
+                  <div className="mx-auto mt-4 h-px w-16 bg-gradient-to-r from-transparent via-gold to-transparent" />
+                  <p className="mt-4 text-[11px] uppercase tracking-[0.28em] text-gold">
+                    {member.role}
+                  </p>
+                </div>
+              </article>
+            ))}
           </div>
-          <div>
-            <p className="text-xs tracking-[0.4em] text-gold uppercase mb-4">The Founder</p>
-            <h2 className="font-display text-5xl md:text-6xl text-ivory leading-tight">
-              Sameera <span className="text-gradient-gold italic">Sinhapali</span>
-            </h2>
-            <div className="mt-6 h-px w-24 bg-gradient-to-r from-gold to-transparent" />
-            <p className="mt-8 text-lg text-ivory/80 leading-relaxed">
-              A visionary at the heart of Dubai's luxury events scene, Sameera built Ceylon Kandy
-              Events on a singular belief: that every celebration deserves to be unforgettable.
-            </p>
-            <p className="mt-4 text-base text-muted-foreground leading-relaxed">
-              From intimate private gatherings to internationally-attended galas, his leadership has
-              defined a new standard of premium event craft in the UAE.
-            </p>
+          <div className="mt-12 text-center">
             <Link
               to="/founder"
-              className="mt-10 inline-flex items-center gap-3 text-gold uppercase tracking-[0.3em] text-xs hover:gap-5 transition-all"
+              className="inline-flex items-center gap-3 text-gold uppercase tracking-[0.3em] text-xs hover:gap-5 transition-all"
             >
-              Read His Journey <ArrowRight size={14} />
+              Read Founder Journey <ArrowRight size={14} />
             </Link>
           </div>
         </div>

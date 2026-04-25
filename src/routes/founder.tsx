@@ -2,26 +2,53 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Quote } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { SectionHeading } from "@/components/SectionHeading";
-import portrait from "@/assets/sameera-portrait.png";
+import portrait from "@/assets/team/sameera-singhapali-founder-ceo.jpeg";
 
 export const Route = createFileRoute("/founder")({
   head: () => ({
     meta: [
-      { title: "Founder — Sameera Sinhapali | Ceylon Kandy Events Dubai" },
-      { name: "description", content: "Meet Sameera Sinhapali — founder and creative director of Ceylon Kandy Events, Dubai's premier luxury event house." },
-      { property: "og:title", content: "Sameera Sinhapali — Founder, Ceylon Kandy Events" },
-      { property: "og:description", content: "The visionary behind Dubai's most exclusive events." },
+      { title: "Founder — Sameera Singhapali | Ceylon Kandy Events Dubai" },
+      {
+        name: "description",
+        content:
+          "Meet Sameera Singhapali — founder and creative director of Ceylon Kandy Events, Dubai's premier luxury event house.",
+      },
+      { property: "og:title", content: "Sameera Singhapali — Founder, Ceylon Kandy Events" },
+      {
+        property: "og:description",
+        content: "The visionary behind Dubai's most exclusive events.",
+      },
     ],
   }),
   component: FounderPage,
 });
 
 const MILESTONES = [
-  { year: "2013", t: "The First Soirée", d: "A private gathering in Colombo became the spark for a lifelong vocation." },
-  { year: "2017", t: "Dubai Move", d: "Relocated to Dubai to serve a growing roster of GCC private clients." },
-  { year: "2020", t: "Ceylon Kandy Events", d: "Founded the company, blending South Asian warmth with Emirati luxury." },
-  { year: "2023", t: "Major Galas", d: "Curated international concerts and high-profile brand activations." },
-  { year: "2026", t: "Today", d: "Leading a multi-disciplinary team across events, modelling, and entertainment." },
+  {
+    year: "2013",
+    t: "The First Soirée",
+    d: "A private gathering in Colombo became the spark for a lifelong vocation.",
+  },
+  {
+    year: "2017",
+    t: "Dubai Move",
+    d: "Relocated to Dubai to serve a growing roster of GCC private clients.",
+  },
+  {
+    year: "2020",
+    t: "Ceylon Kandy Events",
+    d: "Founded the company, blending South Asian warmth with Emirati luxury.",
+  },
+  {
+    year: "2023",
+    t: "Major Galas",
+    d: "Curated international concerts and high-profile brand activations.",
+  },
+  {
+    year: "2026",
+    t: "Today",
+    d: "Leading a multi-disciplinary team across events, modelling, and entertainment.",
+  },
 ];
 
 function FounderPage() {
@@ -33,7 +60,11 @@ function FounderPage() {
             <div className="absolute inset-0 -m-3 border border-gold opacity-50" />
             <div className="relative size-full bg-gradient-to-b from-charcoal via-onyx to-black overflow-hidden">
               <div className="absolute inset-0 bg-gradient-gold-soft opacity-40" />
-              <img src={portrait} alt="Sameera Sinhapali — Founder, Ceylon Kandy Events" className="relative size-full object-cover object-top" />
+              <img
+                src={portrait}
+                alt="Sameera Singhapali — Founder, Ceylon Kandy Events"
+                className="relative size-full object-cover object-[center_18%]"
+              />
               <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-onyx to-transparent" />
             </div>
           </div>
@@ -41,17 +72,24 @@ function FounderPage() {
           <div className="lg:col-span-3">
             <p className="text-xs tracking-[0.5em] text-gold uppercase mb-5">The Founder</p>
             <h1 className="font-display text-5xl md:text-7xl text-ivory leading-[1.05]">
-              Sameera<br/><span className="text-gradient-gold italic">Sinhapali</span>
+              Sameera
+              <br />
+              <span className="text-gradient-gold italic">Singhapali</span>
             </h1>
             <div className="mt-6 h-px w-24 bg-gradient-to-r from-gold to-transparent" />
             <p className="mt-8 text-lg text-ivory/85 leading-relaxed">
-              Founder & Creative Director of Ceylon Kandy Events. A visionary at the heart of Dubai's luxury events scene.
+              Founder & Creative Director of Ceylon Kandy Events. A visionary at the heart of
+              Dubai's luxury events scene.
             </p>
             <p className="mt-4 text-base text-muted-foreground leading-relaxed">
-              Sameera built Ceylon Kandy Events on a singular conviction: that every celebration deserves to be unforgettable. From private royal gatherings to internationally-attended galas, his quiet leadership has defined a new standard of premium event craft in the UAE.
+              Sameera built Ceylon Kandy Events on a singular conviction: that every celebration
+              deserves to be unforgettable. From private royal gatherings to
+              internationally-attended galas, his quiet leadership has defined a new standard of
+              premium event craft in the UAE.
             </p>
             <p className="mt-4 text-base text-muted-foreground leading-relaxed">
-              His philosophy unites South Asian hospitality, Emirati grandeur and global production discipline — a signature now recognised across Dubai's most discerning circles.
+              His philosophy unites South Asian hospitality, Emirati grandeur and global production
+              discipline — a signature now recognised across Dubai's most discerning circles.
             </p>
           </div>
         </div>
@@ -63,7 +101,7 @@ function FounderPage() {
           <p className="font-display italic text-3xl md:text-4xl text-ivory leading-snug">
             "Luxury is not what you spend. It is what you remember a decade later."
           </p>
-          <p className="mt-8 text-xs tracking-[0.4em] text-gold uppercase">— Sameera Sinhapali</p>
+          <p className="mt-8 text-xs tracking-[0.4em] text-gold uppercase">— Sameera Singhapali</p>
         </div>
       </section>
 
@@ -72,7 +110,10 @@ function FounderPage() {
           <SectionHeading eyebrow="The Journey" title="Milestones" />
           <div className="mt-16 max-w-3xl mx-auto space-y-px">
             {MILESTONES.map((m) => (
-              <div key={m.year} className="grid grid-cols-[100px_1fr] md:grid-cols-[140px_1fr] gap-6 p-6 border-t border-gold-soft hover:bg-charcoal/50 transition-colors">
+              <div
+                key={m.year}
+                className="grid grid-cols-[100px_1fr] md:grid-cols-[140px_1fr] gap-6 p-6 border-t border-gold-soft hover:bg-charcoal/50 transition-colors"
+              >
                 <p className="font-display text-3xl text-gradient-gold">{m.year}</p>
                 <div>
                   <h3 className="font-display text-2xl text-ivory">{m.t}</h3>
